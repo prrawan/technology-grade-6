@@ -25,7 +25,7 @@ def page(path, title, content):
     target = OUT / path
     target.parent.mkdir(parents=True, exist_ok=True)
     depth = len(Path(path).parts) - 1
-    target.write_text(LAYOUT.substitute(title=escape('رحلة التكنولوجيا | الصف السادس الأساسي' if title == 'الرئيسية' else title), root='../' * depth, content=content))
+    target.write_text(LAYOUT.substitute(title=escape('رحلة التكنولوجيا | الصف السادس الأساسي' if title == 'الرئيسية' else title), root='../' * depth, content=content, extra_styles='<link rel="stylesheet" href="assets/homepage.css">' if path == 'index.html' else ''))
 
 
 def card(title, label, symbol, href=None, description=None):
@@ -35,6 +35,14 @@ def card(title, label, symbol, href=None, description=None):
     bottom = '<span>افتح الدرس</span><span aria-hidden="true">←</span>' if description else '<span>ابدأ من هنا</span><span aria-hidden="true">←</span>' if href else '<span class="badge">قيد الإعداد</span>'
     return f'<{tag} class="{classes}"{attrs}><div class="card-top">{icon(symbol)}<span class="number">{escape(label)}</span></div><h3>{escape(title)}</h3>{"<p>" + escape(description) + "</p>" if description else ""}<div class="card-bottom">{bottom}</div></{tag}>'
 
+
+
+def station(entry, number, href):
+    title = escape(entry['title'])
+    start = f'<a class="station-start" href="{href}">ابدأ الدروس <span aria-hidden="true">←</span></a>' if href else '<span class="station-start pending">ابدأ الدروس <small>قريبًا</small></span>'
+    activity = '<a href="#prediction" aria-label="نشاط تفاعلي: جرّب البكرة"><span aria-hidden="true">🧩</span> نشاط تفاعلي</a>' if href else '<span><span aria-hidden="true">🧩</span> نشاط تفاعلي <small>قريبًا</small></span>'
+    status = '' if href else '<span class="badge">قيد الإعداد</span>'
+    return f'<article class="station"><div class="station-heading">{icon(entry["icon"])}<div><small>الوحدة {number:02}</small><h3>{title}</h3>{status}</div></div>{start}<div class="station-options">{activity}<span><span aria-hidden="true">🏆</span> تحدّي الوحدة <small>قريبًا</small></span></div></article>'
 
 
 def characters(scene):
@@ -54,7 +62,7 @@ def build():
         if 'directory' in entry:
             unit = json.loads((ROOT / 'units' / entry['directory'] / 'unit.json').read_text())
         href = f'units/{unit["slug"]}/index.html' if unit else None
-        cards.append(card(entry['title'], f'الوحدة {number:02}', entry['icon'], href))
+        cards.append(station(entry, number, href))
         if unit:
             unit_path = f'units/{unit["slug"]}'
             lesson_cards = []
@@ -65,7 +73,7 @@ def build():
                 page(f'{unit_path}/{lesson["slug"]}.html', lesson['title'], content)
             content = f'''<nav class="breadcrumb" aria-label="مسار الصفحة"><a href="../../index.html#book-map">خريطة الكتاب</a><span aria-hidden="true">/</span><span aria-current="page">{escape(unit['title'])}</span></nav><section class="unit-intro"><div class="page-intro"><div class="eyebrow">الوحدة {number:02}</div><h1>{escape(unit['title'])}</h1><p class="intro">خطوتك الأولى في رحلة التكنولوجيا. اختر درسًا لتفتح صفحته التمهيدية.</p></div></section><section aria-labelledby="lessons-title"><div class="section-heading"><h2 id="lessons-title">دروس الوحدة</h2><p>درسان، وبداية جديدة للاكتشاف</p></div><div class="grid lessons">{''.join(lesson_cards)}</div></section><p style="margin-top:28px"><a class="back-link" href="../../index.html#book-map">← العودة إلى خريطة الكتاب</a></p>'''
             page(f'{unit_path}/index.html', unit['title'], content)
-    content = f'''{(ROOT / "templates/experiment.html").read_text()}<section id="book-map" aria-labelledby="map-title"><div class="section-heading"><div><div class="eyebrow">مسارك في هذا الكتاب</div><h2 id="map-title">خريطة الكتاب</h2></div><p>ثلاث وحدات مرتّبة حسب المنهج</p></div><div class="grid">{''.join(cards)}</div></section>'''
+    content = f'''{(ROOT / "templates/experiment.html").read_text()}<section id="book-map" aria-labelledby="map-title"><div class="section-heading"><div><div class="eyebrow">مسارك في هذا الكتاب</div><h2 id="map-title">خريطة الوحدات</h2></div><p>ثلاث وحدات مرتّبة حسب المنهج</p></div><div class="grid">{''.join(cards)}</div></section>'''
     page('index.html', 'الرئيسية', content)
     print(f'Built {len(list(OUT.rglob("*.html")))} pages in {OUT}')
 
