@@ -1,5 +1,37 @@
+// One earned star per completed pulley experiment, independent of prediction.
+const progressKey = 'technology-grade-6:pulley-completed:v1';
+let completed = false;
+try { completed = localStorage.getItem(progressKey) === 'true'; } catch { /* Session fallback when storage is unavailable. */ }
+const count = document.querySelector('#star-count');
+const updateCount = () => { if (count) count.textContent = completed ? '1' : '0'; };
+updateCount();
+window.addEventListener('storage', event => {
+  if (event.key === progressKey || event.key === null) {
+    try { completed = localStorage.getItem(progressKey) === 'true'; } catch { return; }
+    updateCount();
+  }
+});
+function awardStar() {
+  const message = document.querySelector('#star-message');
+  try { completed = completed || localStorage.getItem(progressKey) === 'true'; } catch { /* Keep session state. */ }
+  if (completed) {
+    message.textContent = '★ نجمتك محفوظة؛ يمكنك تكرار التجربة كما تشاء.';
+    updateCount();
+    return;
+  }
+  completed = true;
+  let saved = true;
+  try { localStorage.setItem(progressKey, 'true'); } catch { saved = false; }
+  updateCount();
+  message.textContent = saved ? '★ ربحت نجمة لأنك أكملت التجربة! الاختبار والاكتشاف يستحقان نجمة.' : '★ ربحت نجمة لهذه الجلسة! تعذّر حفظها على الجهاز.';
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    message.animate([{ transform: 'scale(.95)', opacity: .3 }, { transform: 'scale(1.04)', opacity: 1 }, { transform: 'scale(1)', opacity: 1 }], { duration: 600, iterations: 1 });
+  }
+}
+
 const scene = document.querySelector('.pulley-scene');
 if (scene) {
+  document.querySelector('#try-pulley').addEventListener('click', () => document.querySelector('#prediction').focus({ preventScroll: true }));
   const pull = document.querySelector('#pull');
   const reset = document.querySelector('#reset');
   const choices = [...document.querySelectorAll('[name="prediction"]')];
@@ -54,6 +86,7 @@ if (scene) {
       scene.querySelector('.scene-lin').alt = 'لين تشير إلى الصندوق المرتفع';
       feedback.innerHTML = `توقّعك: <strong>${prediction === 'up' ? 'إلى أعلى' : 'إلى أسفل'}</strong>. النتيجة: <strong>ارتفع الصندوق</strong>. ${prediction === 'up' ? 'أحسنت! وافقت النتيجة توقّعك.' : 'توقّعت نزول الصندوق؛ لاحظ أنه ارتفع.'} <strong>البَكَرَة الثابتة تغيّر اتجاه السحب</strong>: نسحب إلى أسفل، فترتفع <strong>الحَمولة</strong> إلى أعلى.`;
       actions.hidden = false;
+      awardStar();
     };
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return finish();
     const start = performance.now();
@@ -70,6 +103,7 @@ if (scene) {
     choices.forEach(choice => { choice.checked = false; choice.disabled = false; });
     render(0);
     actions.hidden = true;
+    document.querySelector('#star-message').textContent = '';
     pull.disabled = true;
     scene.querySelector('.scene-lin').src = 'assets/characters/lin-welcome-scene.png';
     scene.querySelector('.scene-lin').alt = 'لين تراقب الصندوق';

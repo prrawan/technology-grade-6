@@ -1,7 +1,7 @@
 <section class="experiment" aria-labelledby="site-title">
 
 <div class="experiment-grid">
-<h1 id="site-title">رحلة التكنولوجيا<span>الصف السادس الأساسي</span></h1>
+<h1 id="site-title">رحلة <em class="technology-word">التكنولوجيا</em><span>الصف السادس الأساسي</span></h1>
 <div class="pulley-scene" role="img" aria-label="لين ويزن حول بكرة ثابتة؛ عند السحب إلى أسفل يرتفع الصندوق">
 <img class="scene-lin" src="assets/characters/lin-welcome-scene.png" alt="لين تراقب الصندوق">
 
@@ -23,11 +23,14 @@
 <span class="scene-label">البَكَرَة الثابتة</span>
 </div>
 <div class="experiment-controls">
+<p class="intro experiment-intro">هل تستطيع رفع الصندوق؟ توقّع اتجاهه، ثم اسحب الحبل مع يزن واكتشف النتيجة مع لين.</p>
+<div class="intro-actions"><a class="button" id="try-pulley" href="#prediction"><span aria-hidden="true">↓</span> جرّب البَكرة</a><a class="button secondary" href="#book-map"><span aria-hidden="true">☷</span> استكشف الوحدات</a></div>
 <p class="eyebrow">توقّع، ثم جرّب مع لين ويزن</p>
-<fieldset><legend>تسأل لين: إذا سحبنا الحبل إلى أسفل، فإلى أين يتحرّك الصندوق؟</legend><div class="choices"><label><input type="radio" name="prediction" value="up"> إلى أعلى</label><label><input type="radio" name="prediction" value="down"> إلى أسفل</label></div></fieldset>
+<fieldset id="prediction" tabindex="-1"><legend>تسأل لين: إذا سحبنا الحبل لتحت، وين رح يتحرّك الصندوق؟</legend><div class="choices"><label><input type="radio" name="prediction" value="up"> إلى أعلى</label><label><input type="radio" name="prediction" value="down"> إلى أسفل</label></div></fieldset>
 <p id="prediction-summary" role="status" aria-live="polite">اختر توقّعك لتبدأ.</p>
-<button class="button" id="pull" disabled>اسحب الحبل ↓</button>
+<button class="button" id="pull" disabled><span aria-hidden="true">↓</span> اسحب الحبل</button>
 <p id="feedback" role="status" aria-live="polite">اختر توقّعك أولًا لتفعيل السحب.</p>
+<p id="star-message" class="star-message" role="status" aria-live="polite"></p>
 <div id="result-actions" hidden><button class="button secondary" id="reset">جرّب مرة أخرى</button><a class="back-link" href="units/thinking-technology/world-of-wheels.html">تابع درس عالم من عجلات ←</a></div>
 <a class="back-link" href="#book-map">استكشف الوحدات ↓</a>
 <noscript><p>فعّل JavaScript لتجربة السحب. البَكَرَة الثابتة تغيّر اتجاه السحب: نسحب الحبل إلى أسفل فترتفع الحَمولة.</p></noscript>

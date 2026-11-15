@@ -32,7 +32,7 @@ def card(title, label, symbol, href=None, description=None):
     tag = 'a' if href else 'article'
     attrs = f' href="{escape(href)}"' if href else ''
     classes = 'card card-link available' if href else 'card'
-    bottom = '<span>افتح الدرس</span><span aria-hidden="true">←</span>' if description else '<span>ابدأ الاستكشاف</span><span aria-hidden="true">←</span>' if href else '<span class="badge">قيد الإعداد</span>'
+    bottom = '<span>افتح الدرس</span><span aria-hidden="true">←</span>' if description else '<span>ابدأ من هنا</span><span aria-hidden="true">←</span>' if href else '<span class="badge">قيد الإعداد</span>'
     return f'<{tag} class="{classes}"{attrs}><div class="card-top">{icon(symbol)}<span class="number">{escape(label)}</span></div><h3>{escape(title)}</h3>{"<p>" + escape(description) + "</p>" if description else ""}<div class="card-bottom">{bottom}</div></{tag}>'
 
 
