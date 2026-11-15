@@ -629,3 +629,7 @@ body:has(.experiment) .stars,body:has(.experiment) .nav-link { padding-block:5px
   .experiment-grid > h1 { padding-top:0; }
   .experiment-grid > .experiment-controls { padding:16px; }
 }
+/* Shared 400-unit baseline in both Lin poses; balanced scene margins. */
+.experiment-grid > .pulley-scene,
+.experiment .pulley-scene svg { aspect-ratio:600/400; }
+.experiment .lin-frame .scene-lin { object-position:center bottom; }
