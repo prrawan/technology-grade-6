@@ -9,7 +9,13 @@ if (scene) {
   const load = document.querySelector('#load');
   const arm = document.querySelector('#yazan-forearm');
   let busy = false;
-  choices.forEach(choice => choice.addEventListener('change', () => { if (!busy) pull.disabled = false; }));
+  let predictionValue = null;
+  choices.forEach(choice => choice.addEventListener('change', () => {
+    if (busy) return;
+    predictionValue = choice.value;
+    pull.disabled = false;
+    feedback.textContent = 'تم تسجيل توقّعك. اضغط اسحب الحبل لتجربته';
+  }));
   function render(progress) {
     // Rotate the extracted forearm around its elbow in source-image coordinates.
     const angle = -110 * progress;
@@ -33,7 +39,7 @@ if (scene) {
   }
   render(0);
   pull.addEventListener('click', () => {
-    const prediction = choices.find(choice => choice.checked);
+    const prediction = predictionValue;
     if (busy || !prediction) return;
     busy = true;
     pull.disabled = true;
@@ -42,7 +48,7 @@ if (scene) {
       render(1);
       scene.querySelector('.scene-lin').src = 'assets/characters/lin-point-scene.png';
       scene.querySelector('.scene-lin').alt = 'لين تشير إلى الصندوق المرتفع';
-      feedback.innerHTML = `${prediction.value === 'up' ? 'أحسنت! وافقت النتيجة توقّعك.' : 'توقّعت نزول الصندوق؛ لاحظ أنه ارتفع.'} <strong>البَكَرَة الثابتة تغيّر اتجاه السحب</strong>: نسحب إلى أسفل، فترتفع <strong>الحَمولة</strong> إلى أعلى.`;
+      feedback.innerHTML = `توقّعك: <strong>${prediction === 'up' ? 'إلى أعلى' : 'إلى أسفل'}</strong>. النتيجة الفعلية: <strong>ارتفع الصندوق إلى أعلى</strong>. ${prediction === 'up' ? 'أحسنت! وافقت النتيجة توقّعك.' : 'توقّعت نزول الصندوق؛ لاحظ أنه ارتفع.'} <strong>البَكَرَة الثابتة تغيّر اتجاه السحب</strong>: نسحب إلى أسفل، فترتفع <strong>الحَمولة</strong> إلى أعلى.`;
       actions.hidden = false;
     };
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return finish();
@@ -56,6 +62,7 @@ if (scene) {
   });
   reset.addEventListener('click', () => {
     busy = false;
+    predictionValue = null;
     choices.forEach(choice => { choice.checked = false; choice.disabled = false; });
     render(0);
     actions.hidden = true;
