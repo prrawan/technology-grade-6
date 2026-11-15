@@ -498,3 +498,4 @@ input { accent-color:var(--teal); width:20px; height:20px; }
   .experiment-grid { grid-template-areas:". title" "scene controls"; }
   .experiment-grid > .pulley-scene { margin-top:36px; }
 }
+#prediction-summary { margin-block:0 12px; min-height:32px; font-weight:bold; color:var(--teal); }
