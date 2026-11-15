@@ -485,3 +485,16 @@ input { accent-color:var(--teal); width:20px; height:20px; }
   .experiment-grid { align-items:start; }
   .pulley-scene { margin-top:135px; }
 }
+/* Explicit physical column placement; mobile reads title, scene, controls. */
+.experiment-grid { grid-template-areas:"scene title" "scene controls"; grid-template-rows:auto 1fr; row-gap:0; }
+.experiment-grid > h1 { grid-area:title; direction:rtl; text-align:right; }
+.experiment-grid > .pulley-scene { grid-area:scene; margin-top:104px; }
+.experiment-grid > .experiment-controls { grid-area:controls; }
+@media(max-width:600px) {
+  .experiment-grid { grid-template-areas:"title" "scene" "controls"; grid-template-rows:auto auto auto; row-gap:16px; }
+  .experiment-grid > .pulley-scene { margin-top:0; }
+}
+@media(min-width:601px) {
+  .experiment-grid { grid-template-areas:". title" "scene controls"; }
+  .experiment-grid > .pulley-scene { margin-top:36px; }
+}

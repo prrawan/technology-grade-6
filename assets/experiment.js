@@ -8,16 +8,6 @@ if (scene) {
   const rope = document.querySelector('#rope');
   const load = document.querySelector('#load');
   const arm = document.querySelector('#yazan-forearm');
-  const alignScene = () => {
-    const grid = scene.parentElement;
-    const question = document.querySelector('.experiment legend');
-    scene.style.marginTop = innerWidth > 600
-      ? `${Math.max(0, question.getBoundingClientRect().top - grid.getBoundingClientRect().top)}px`
-      : '0px';
-  };
-  new ResizeObserver(alignScene).observe(document.querySelector('.experiment-controls'));
-  window.addEventListener('resize', alignScene);
-  alignScene();
   let busy = false;
   choices.forEach(choice => choice.addEventListener('change', () => { if (!busy) pull.disabled = false; }));
   function render(progress) {
