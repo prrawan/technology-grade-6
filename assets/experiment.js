@@ -27,15 +27,16 @@ if (scene) {
     const scale = 240 / 724;
     const x = 290 + (elbow.x + dx * Math.cos(radians) - dy * Math.sin(radians)) * scale;
     const y = 40 + (elbow.y + dx * Math.sin(radians) + dy * Math.cos(radians)) * scale;
-    const startX = 290 + grip.x * scale;
     const startY = 40 + grip.y * scale;
-    // The load rises by the extra length paid out at the pulling end.
-    const shift = Math.hypot(x - 330, y - 105) - Math.hypot(startX - 330, startY - 105);
+    // Fixed pulley: the load rises by exactly the downward grip displacement.
+    const shift = y - startY;
     arm.setAttribute('transform', `rotate(${angle} ${elbow.x} ${elbow.y})`);
     rope.setAttribute('d', `M270 ${300-shift}V105a30 30 0 0 1 60 0L${x} ${y}L${x} ${y+18}`);
     rope.dataset.gripX = x;
     rope.dataset.gripY = y;
     load.setAttribute('transform', `translate(0 ${-shift})`);
+    load.dataset.rise = shift;
+    rope.dataset.loadY = 300 - shift;
   }
   render(0);
   pull.addEventListener('click', () => {
