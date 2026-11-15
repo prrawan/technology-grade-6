@@ -633,3 +633,8 @@ body:has(.experiment) .stars,body:has(.experiment) .nav-link { padding-block:5px
 .experiment-grid > .pulley-scene,
 .experiment .pulley-scene svg { aspect-ratio:600/400; }
 .experiment .lin-frame .scene-lin { object-position:center bottom; }
+/* Keep the midpoint between Lin's shoes fixed when her silhouette changes.
+   Source shoe centers: welcome x=107/250, pointing x=193/321.
+   Both sprites render 356 units high and share the y=400 baseline. */
+.experiment .lin-frame .scene-lin { transform:translateX(0) scaleX(-1); }
+.experiment .lin-frame .scene-lin[src$="lin-point-scene.png"] { transform:translateX(25.74px) scaleX(-1); }
