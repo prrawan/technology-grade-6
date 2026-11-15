@@ -7,7 +7,7 @@ if (scene) {
   const actions = document.querySelector('#result-actions');
   const rope = document.querySelector('#rope');
   const load = document.querySelector('#load');
-  const arm = document.querySelector('#yazan-grip');
+  const arm = document.querySelector('#yazan-forearm');
   const alignScene = () => {
     const grid = scene.parentElement;
     const question = document.querySelector('.experiment legend');
@@ -21,13 +21,27 @@ if (scene) {
   let busy = false;
   choices.forEach(choice => choice.addEventListener('change', () => { if (!busy) pull.disabled = false; }));
   function render(progress) {
-    // Two matched full-body frames keep the arm anatomically attached.
-    const finalFrame = progress >= 0.5;
-    const shift = finalFrame ? 70 : 0;
+    // Rotate the extracted forearm around its elbow in source-image coordinates.
+    const angle = -110 * progress;
+    const radians = angle * Math.PI / 180;
+    const elbow = { x: 195, y: 345 };
+    const grip = { x: 119, y: 282 };
+    const dx = grip.x - elbow.x;
+    const dy = grip.y - elbow.y;
+    const scale = 240 / 724;
+    const x = 290 + (elbow.x + dx * Math.cos(radians) - dy * Math.sin(radians)) * scale;
+    const y = 40 + (elbow.y + dx * Math.sin(radians) + dy * Math.cos(radians)) * scale;
+    const startX = 290 + grip.x * scale;
+    const startY = 40 + grip.y * scale;
+    // The load rises by the extra length paid out at the pulling end.
+    const shift = Math.hypot(x - 330, y - 105) - Math.hypot(startX - 330, startY - 105);
+    arm.setAttribute('transform', `rotate(${angle} ${elbow.x} ${elbow.y})`);
+    rope.setAttribute('d', `M270 ${300-shift}V105a30 30 0 0 1 60 0L${x} ${y}L${x} ${y+18}`);
+    rope.dataset.gripX = x;
+    rope.dataset.gripY = y;
     load.setAttribute('transform', `translate(0 ${-shift})`);
-    rope.setAttribute('d', `M270 ${300-shift}V105a30 30 0 0 1 60 0v${30+shift}`);
-    arm.setAttribute('href', `assets/characters/yazan-grip-${finalFrame ? 'end' : 'start'}.png`);
   }
+  render(0);
   pull.addEventListener('click', () => {
     const prediction = choices.find(choice => choice.checked);
     if (busy || !prediction) return;
