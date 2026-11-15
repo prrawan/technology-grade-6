@@ -25,7 +25,7 @@ def page(path, title, content):
     target = OUT / path
     target.parent.mkdir(parents=True, exist_ok=True)
     depth = len(Path(path).parts) - 1
-    target.write_text(LAYOUT.substitute(title=escape('رحلة التكنولوجيا | الصف السادس الأساسي' if title == 'الرئيسية' else title), root='../' * depth, content=content, extra_styles='<link rel="stylesheet" href="assets/homepage.css">' if path == 'index.html' else ''))
+    target.write_text(LAYOUT.substitute(title=escape('رحلة التكنولوجيا | الصف السادس الأساسي' if title == 'الرئيسية' else title), root='../' * depth, content=content, extra_styles='<link rel="stylesheet" href="assets/homepage.css">' if path == 'index.html' else '<link rel="stylesheet" href="../../assets/unit-experiment.css">' if path == 'units/thinking-technology/index.html' else ''))
 
 
 def card(title, label, symbol, href=None, description=None):
@@ -39,10 +39,18 @@ def card(title, label, symbol, href=None, description=None):
 
 def station(entry, number, href):
     title = escape(entry['title'])
-    start = f'<a class="station-start" href="{href}">ابدأ الدروس <span aria-hidden="true">←</span></a>' if href else '<span class="station-start pending">ابدأ الدروس <small>قريبًا</small></span>'
-    activity = '<a href="#prediction" aria-label="نشاط تفاعلي: جرّب البكرة"><span aria-hidden="true">🧩</span> نشاط تفاعلي</a>' if href else '<span><span aria-hidden="true">🧩</span> نشاط تفاعلي <small>قريبًا</small></span>'
+    start = f'<a class="station-start" href="{href}"><svg aria-hidden="true" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 4q5-3 10 0 5-3 10 0v16q-5-3-10 0-5-3-10 0zM12 4v16"/></svg> الدروس</a>' if href else '<span class="station-start pending"><svg aria-hidden="true" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 4q5-3 10 0 5-3 10 0v16q-5-3-10 0-5-3-10 0zM12 4v16"/></svg> الدروس <small>قريبًا</small></span>'
+    activity = '<a href="units/thinking-technology/index.html#pulley-experiment" aria-label="نشاط تفاعلي: جرّب البكرة"><span aria-hidden="true">🧩</span> نشاط تفاعلي</a>' if href else '<span><span aria-hidden="true">🧩</span> نشاط تفاعلي <small>قريبًا</small></span>'
     status = '' if href else '<span class="badge">قيد الإعداد</span>'
-    return f'<article class="station"><div class="station-heading">{icon(entry["icon"])}<div><small>الوحدة {number:02}</small><h3>{title}</h3>{status}</div></div>{start}<div class="station-options">{activity}<span><span aria-hidden="true">🏆</span> تحدّي الوحدة <small>قريبًا</small></span></div></article>'
+    return f'<article class="station{' station-ready' if href else ''}"><div class="station-heading">{icon(entry["icon"])}<div><small>الوحدة {number:02}</small><h3>{title}</h3>{status}</div></div>{start}<div class="station-options">{activity}<span><span aria-hidden="true">🏆</span> تحدّي الوحدة <small>قريبًا</small></span></div></article>'
+
+
+def unit_experiment():
+    source = (ROOT / 'templates/experiment.html').read_text()
+    start = source.index('<h1')
+    end = source.index('</h1>', start) + 5
+    source = source[:start] + '<h2 id="pulley-title">جرّب البَكرة مع لين ويزن</h2>' + source[end:]
+    return source.replace('aria-labelledby="site-title"', 'id="pulley-experiment" aria-labelledby="pulley-title"').replace('assets/', '../../assets/').replace('href="units/thinking-technology/world-of-wheels.html"', 'href="world-of-wheels.html"').replace('href="#book-map"', 'href="../../index.html#book-map"')
 
 
 def characters(scene):
@@ -72,8 +80,8 @@ def build():
                 content = f'''<nav class="breadcrumb" aria-label="مسار الصفحة"><a href="../../index.html#book-map">خريطة الكتاب</a><span aria-hidden="true">/</span><a href="index.html">{escape(unit['title'])}</a><span aria-hidden="true">/</span><span aria-current="page">{title}</span></nav><section class="page-intro"><div class="eyebrow">الوحدة {number:02} · الدرس {lesson_number:02}</div><h1>{title}</h1></section><section class="lesson-panel">{icon(lesson['icon'])}<h2>هنا تبدأ رحلتنا مع «{title}»</h2><p>هذه الصفحة هي نقطة البداية للدرس. نجهّز الشرح والفيديو والأنشطة التفاعلية لمرحلة قادمة.</p><span class="badge">محتوى الدرس قيد الإعداد</span></section><a class="back-link" href="index.html">← العودة إلى وحدة {escape(unit['title'])}</a>'''
                 page(f'{unit_path}/{lesson["slug"]}.html', lesson['title'], content)
             content = f'''<nav class="breadcrumb" aria-label="مسار الصفحة"><a href="../../index.html#book-map">خريطة الكتاب</a><span aria-hidden="true">/</span><span aria-current="page">{escape(unit['title'])}</span></nav><section class="unit-intro"><div class="page-intro"><div class="eyebrow">الوحدة {number:02}</div><h1>{escape(unit['title'])}</h1><p class="intro">خطوتك الأولى في رحلة التكنولوجيا. اختر درسًا لتفتح صفحته التمهيدية.</p></div></section><section aria-labelledby="lessons-title"><div class="section-heading"><h2 id="lessons-title">دروس الوحدة</h2><p>درسان، وبداية جديدة للاكتشاف</p></div><div class="grid lessons">{''.join(lesson_cards)}</div></section><p style="margin-top:28px"><a class="back-link" href="../../index.html#book-map">← العودة إلى خريطة الكتاب</a></p>'''
-            page(f'{unit_path}/index.html', unit['title'], content)
-    content = f'''{(ROOT / "templates/experiment.html").read_text()}<section id="book-map" aria-labelledby="map-title"><div class="section-heading"><div><div class="eyebrow">مسارك في هذا الكتاب</div><h2 id="map-title">خريطة الوحدات</h2></div><p>ثلاث وحدات مرتّبة حسب المنهج</p></div><div class="grid">{''.join(cards)}</div></section>'''
+            page(f'{unit_path}/index.html', unit['title'], content + (unit_experiment() if number == 1 else ''))
+    content = f'''{(ROOT / "templates/home.html").read_text()}<section id="book-map" aria-labelledby="map-title"><div class="section-heading"><div><div class="eyebrow">مسارك في هذا الكتاب</div><h2 id="map-title">خريطة الوحدات</h2></div><p>ثلاث وحدات مرتّبة حسب المنهج</p></div><div class="grid">{''.join(cards)}</div></section>'''
     page('index.html', 'الرئيسية', content)
     print(f'Built {len(list(OUT.rglob("*.html")))} pages in {OUT}')
 

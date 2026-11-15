@@ -60,7 +60,7 @@ for path, doc in docs.items():
 home = docs[(ROOT / 'index.html').resolve()]
 unit_path = (ROOT / 'units/thinking-technology/index.html').resolve()
 unit = docs[unit_path]
-assert '#book-map' in home.links
+assert any(link.endswith('#book-map') for link in home.links)
 assert unit_path in [home.destination(h) for h in home.links]
 assert '../../index.html#book-map' in unit.links
 for slug, title in [('world-of-wheels', 'عالم من عجلات'), ('electronics-at-home', 'إلكترونيات في بيتي')]:
@@ -73,3 +73,7 @@ for slug, title in [('world-of-wheels', 'عالم من عجلات'), ('electroni
     print(f'PASS: الرئيسية ← الوحدة ← {title} ← الوحدة ← خريطة الكتاب')
 assert (ROOT / 'index.html').read_text().count('قيد الإعداد') == 2
 print('PASS: all page links, anchors, stylesheets, Arabic/RTL, and unavailable units')
+
+assert 'id="pull"' not in (ROOT / 'index.html').read_text()
+assert 'id="pull"' in unit_path.read_text()
+assert any(link.endswith('#pulley-experiment') for link in home.links)
