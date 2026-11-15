@@ -27,7 +27,7 @@ if (scene) {
     choices.forEach(choice => choice.disabled = true);
     const finish = () => {
       render(1);
-      scene.querySelector('.scene-lin').src = 'assets/characters/lin-point.png';
+      scene.querySelector('.scene-lin').src = 'assets/characters/lin-point-scene.png';
       scene.querySelector('.scene-lin').alt = 'لين تشير إلى الصندوق المرتفع';
       feedback.innerHTML = `${prediction.value === 'up' ? 'أحسنت! وافقت النتيجة توقّعك.' : 'توقّعت نزول الصندوق؛ لاحظ أنه ارتفع.'} <strong>البَكَرَة الثابتة تغيّر اتجاه السحب</strong>: نسحب إلى أسفل، فترتفع <strong>الحَمولة</strong> إلى أعلى.`;
       actions.hidden = false;
@@ -47,7 +47,7 @@ if (scene) {
     render(0);
     actions.hidden = true;
     pull.disabled = true;
-    scene.querySelector('.scene-lin').src = 'assets/characters/lin-welcome.png';
+    scene.querySelector('.scene-lin').src = 'assets/characters/lin-welcome-scene.png';
     scene.querySelector('.scene-lin').alt = 'لين تراقب الصندوق';
     feedback.textContent = 'اختر توقّعك أولًا لتفعيل السحب.';
     choices[0].focus();
