@@ -25,6 +25,8 @@ class Document(HTMLParser):
             self.ids.add(attrs['id'])
         if tag in ('a', 'link'):
             self.links.append(attrs['href'])
+        if tag in ('img', 'script') and 'src' in attrs:
+            self.links.append(attrs['src'])
         if tag == 'h1':
             self.in_heading = True
 
