@@ -638,3 +638,62 @@ body:has(.experiment) .stars,body:has(.experiment) .nav-link { padding-block:5px
    Both sprites render 356 units high and share the y=400 baseline. */
 .experiment .lin-frame .scene-lin { transform:translateX(0) scaleX(-1); }
 .experiment .lin-frame .scene-lin[src$="lin-point-scene.png"] { transform:translateX(25.74px) scaleX(-1); }
+/* Reference refinement: a single rounded question panel and balanced illustration. */
+body:has(.experiment) .site-header { min-height:88px; padding-block:12px; background:linear-gradient(110deg,#1b3447,#18273D); }
+body:has(.experiment) .brand { font-size:clamp(24px,2.7vw,38px); }
+body:has(.experiment) .brand small { display:none; }
+body:has(.experiment) .nav-link { display:flex; align-items:center; gap:10px; }
+body:has(.experiment) .site-header::after { height:20px; width:45%; left:29%; border-radius:100% 100% 0 0; background:linear-gradient(90deg,#009e99,#00797c); }
+.experiment { padding-block:24px 12px; }
+.experiment-grid { position:relative; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:0 20px; }
+.experiment-grid::before { display:none; }
+.experiment-grid > h1 { background:#fffaf0d9; border:1px solid white; border-bottom:0; border-radius:32px 32px 0 0; padding:22px 18px 10px; font-size:clamp(32px,4.2vw,60px); }
+.experiment-grid > .experiment-controls { background:#fffaf0d9; border:1px solid white; border-top:0; border-radius:0 0 32px 32px; padding:12px 22px 22px; }
+.experiment h1 > span { margin-block:12px 4px; font-size:clamp(17px,1.9vw,27px); padding:3px 24px; background:linear-gradient(90deg,#ccebe0,#bfe3d8); }
+.experiment-grid > .pulley-scene { aspect-ratio:500/440; border-radius:36px; background:radial-gradient(ellipse,#e2f7ec,#c5e8de); }
+.experiment .pulley-scene svg { aspect-ratio:500/440; }
+.experiment legend { font-size:clamp(21px,2.6vw,37px); font-weight:800; line-height:1.55; }
+.experiment .choices { margin-top:24px; gap:18px; }
+.experiment .choices label { min-height:82px; border-radius:20px; font-size:clamp(19px,2.4vw,33px); background:linear-gradient(135deg,#fffaf0,#f7f1df); }
+.experiment .choices label::after { content:'↓'; color:#008d8d; font-size:1.5em; line-height:1; margin-inline-start:auto; }
+.experiment .choices label:has([value="up"])::after { content:'↑'; }
+.experiment .choices label:has(:checked) { border-color:#077779; background:linear-gradient(130deg,#e2f8ed,#b9e4d7); box-shadow:0 3px 0 #05747824; }
+.experiment .choices input { width:28px; height:28px; }
+#prediction-summary { margin-block:16px; border-radius:28px; padding:10px; background:linear-gradient(90deg,#f7efdc,#f1e4c7); font-size:clamp(16px,1.9vw,26px); }
+.experiment #pull { min-height:86px; font-size:clamp(26px,3vw,42px); border-radius:54px; background:linear-gradient(125deg,#008b88,#00635f); }
+.experiment #feedback { font-size:17px; padding:8px 4px; line-height:1.85; }
+.experiment .intro-actions { margin-top:8px; }
+#book-map .section-heading { margin-block:20px 24px; }
+#book-map h2 { font-size:clamp(30px,3.8vw,52px); }
+#book-map .card { min-height:138px; border-radius:26px; padding:16px 20px; }
+#book-map .card h3 { font-size:clamp(19px,2.2vw,31px); font-weight:800; }
+#book-map .icon { width:70px; height:70px; }
+#book-map .icon svg { width:62px; height:62px; filter:drop-shadow(0 2px 0 #126C7020); }
+#book-map .card-bottom > span:last-child:not(.badge) { font-size:24px; }
+@media(min-width:601px) and (max-width:1050px) {
+  body:has(.experiment) .site-header { min-height:76px; }
+  .experiment-grid > h1 { font-size:32px; padding-top:16px; }
+  .experiment-grid > .experiment-controls { padding:10px 16px 16px; }
+  .experiment legend { font-size:22px; }
+  .experiment .choices { gap:10px; margin-top:14px; }
+  .experiment .choices label { min-height:60px; font-size:19px; }
+  .experiment .choices input { width:23px; height:23px; }
+  #prediction-summary { margin-block:10px; font-size:16px; }
+  .experiment #pull { min-height:66px; font-size:28px; }
+  #book-map .icon { width:46px; }
+  #book-map .icon svg { width:44px; }
+  #book-map .card { padding:12px; }
+}
+@media(max-width:600px) {
+  body:has(.experiment) .site-header { min-height:0; }
+  .experiment-grid { gap:14px; }
+  .experiment-grid > h1 { padding:12px; border-radius:24px; border:1px solid white; font-size:34px; }
+  .experiment-grid > .experiment-controls { border:1px solid white; border-radius:24px; padding:16px; }
+  .experiment-grid > .pulley-scene { border-radius:26px; }
+  .experiment legend { font-size:21px; }
+  .experiment .choices { gap:10px; margin-top:16px; }
+  .experiment .choices label { min-height:64px; font-size:19px; }
+  #prediction-summary { font-size:16px; margin-block:12px; }
+  .experiment #pull { font-size:28px; min-height:68px; }
+  #book-map .card h3 { font-size:23px; }
+}
