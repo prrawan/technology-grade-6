@@ -7,17 +7,16 @@ if (scene) {
   const actions = document.querySelector('#result-actions');
   const rope = document.querySelector('#rope');
   const load = document.querySelector('#load');
-  const arm = document.querySelector('#pull-arm');
+  const arm = document.querySelector('#yazan-grip');
   let busy = false;
   choices.forEach(choice => choice.addEventListener('change', () => { if (!busy) pull.disabled = false; }));
   function render(progress) {
-    const shift = 65 * progress;
+    // Two matched full-body frames keep the arm anatomically attached.
+    const finalFrame = progress >= 0.5;
+    const shift = finalFrame ? 70 : 0;
     load.setAttribute('transform', `translate(0 ${-shift})`);
-    rope.setAttribute('d', `M270 ${300-shift}V105a30 30 0 0 1 60 0v${110+shift}`);
-    // Shoulder remains fixed while the independent forearm and hand pull down.
-    arm.children[0].setAttribute('d', `M399 205Q373 ${231+shift/2} 330 ${215+shift}`);
-    arm.children[1].setAttribute('d', `M363 ${222+shift*.7}L330 ${215+shift}`);
-    arm.children[2].setAttribute('cy', 215+shift);
+    rope.setAttribute('d', `M270 ${300-shift}V105a30 30 0 0 1 60 0v${30+shift}`);
+    arm.setAttribute('href', `assets/characters/yazan-grip-${finalFrame ? 'end' : 'start'}.png`);
   }
   pull.addEventListener('click', () => {
     const prediction = choices.find(choice => choice.checked);
