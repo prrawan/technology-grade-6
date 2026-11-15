@@ -499,3 +499,26 @@ input { accent-color:var(--teal); width:20px; height:20px; }
   .experiment-grid > .pulley-scene { margin-top:36px; }
 }
 #prediction-summary { margin-block:0 12px; min-height:32px; font-weight:bold; color:var(--teal); }
+/* Touch-first homepage and book stations. */
+h1,h2,h3 { font-family:Tahoma,Arial,sans-serif; font-weight:800; }
+.technology-word { font-style:normal; color:var(--teal); text-shadow:1px 2px 0 #126C7020; }
+.intro-actions { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px; }
+.button { border-radius:28px; min-height:48px; }
+.button.secondary { color:var(--teal); background:transparent; border:1px solid var(--teal); }
+.button:active { transform:scale(.97); filter:brightness(.92); }
+.experiment-intro { font-size:16px; margin-bottom:14px; }
+.experiment-controls .eyebrow { margin-bottom:10px; }
+.stars { display:inline-flex; gap:7px; align-items:center; padding:5px 12px; border:1px solid var(--line); border-radius:24px; font-size:14px; margin-inline-start:auto; }
+.stars > span,.star-message { color:#805718; }
+.star-message { font-weight:bold; margin-block:8px; }
+.star-message:empty { display:none; }
+#book-map .grid { position:relative; gap:24px; }
+#book-map .card { border-radius:24px; border-top:4px solid var(--line); }
+#book-map .card.available { border-top-color:var(--teal); }
+#book-map .icon { border-radius:50%; width:64px; height:64px; }
+#book-map .icon svg { width:38px; height:38px; }
+#book-map .card-bottom > span:first-child:not(.badge) { background:var(--pale); border-radius:20px; padding:5px 16px; }
+#book-map .number { font-weight:bold; }
+@media(min-width:601px) { .experiment-grid > .pulley-scene { margin-top:175px; } }
+@media(max-width:600px) { .site-header { flex-wrap:wrap; padding-block:12px; gap:8px; } .stars { font-size:12px; padding:3px 8px; } .intro-actions { gap:8px; } .intro-actions .button { padding:10px 16px; font-size:14px; } }
+@media(prefers-reduced-motion:reduce) { .button:active { transform:none; } }
