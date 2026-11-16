@@ -31,6 +31,16 @@ function awardStar() {
 
 const scene = document.querySelector('.pulley-scene');
 if (scene) {
+  if (new URLSearchParams(location.search).get('from') === 'world-of-wheels') {
+    const returnLink = document.createElement('a');
+    returnLink.className = 'back-link';
+    returnLink.href = 'world-of-wheels.html#apply';
+    returnLink.textContent = '← العودة إلى طبّق في الدرس';
+    scene.closest('.experiment').prepend(returnLink);
+    const resultLink = document.querySelector('#result-actions a');
+    resultLink.href = returnLink.href;
+    resultLink.textContent = 'العودة إلى طبّق في الدرس ←';
+  }
   document.querySelector('#try-pulley').addEventListener('click', () => document.querySelector('#prediction').focus({ preventScroll: true }));
   const lin = scene.querySelector('.scene-lin');
   const characterRoot = new URL('.', new URL(lin.getAttribute('href'), document.baseURI)).href;
