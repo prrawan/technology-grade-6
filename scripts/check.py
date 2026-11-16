@@ -75,5 +75,6 @@ assert (ROOT / 'index.html').read_text().count('قيد الإعداد') == 2
 print('PASS: all page links, anchors, stylesheets, Arabic/RTL, and unavailable units')
 
 assert 'id="pull"' not in (ROOT / 'index.html').read_text()
-assert 'id="pull"' in unit_path.read_text()
+assert 'id="pull"' not in unit_path.read_text()
+assert 'id="pull"' in (ROOT / 'units/thinking-technology/world-of-wheels.html').read_text()
 assert any(link.endswith('#pulley-experiment') for link in home.links)

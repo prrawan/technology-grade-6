@@ -111,7 +111,7 @@ if (scene) {
     const finish = () => {
       render(1);
       setLinPose(true);
-      feedback.innerHTML = `توقّعك: <strong>${prediction === 'up' ? 'إلى أعلى' : 'إلى أسفل'}</strong>. النتيجة: <strong>ارتفع الصندوق</strong>. ${prediction === 'up' ? 'أحسنت! وافقت النتيجة توقّعك.' : 'توقّعت نزول الصندوق؛ لاحظ أنه ارتفع.'} <strong>البَكَرَة الثابتة تغيّر اتجاه السحب</strong>: نسحب إلى أسفل، فترتفع <strong>الحَمولة</strong> إلى أعلى.`;
+      feedback.innerHTML = `توقّعك: <strong>${prediction === 'up' ? 'إلى أعلى' : 'إلى أسفل'}</strong>. النتيجة: <strong>ارتفع الصندوق</strong>. ${prediction === 'up' ? 'أحسنت! وافقت النتيجة توقّعك.' : 'توقّعت نزول الصندوق؛ لاحظ أنه ارتفع.'} عندما نسحب الحبل إلى أسفل، يرتفع الصندوق. <strong>البَكرة الثابتة غيّرت اتجاه السحب</strong>.`;
       actions.hidden = false;
       awardStar();
     };
