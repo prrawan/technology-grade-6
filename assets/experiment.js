@@ -1,29 +1,12 @@
-// One earned star per completed pulley experiment, independent of prediction.
-const progressKey = 'technology-grade-6:pulley-completed:v1';
-let completed = false;
-try { completed = localStorage.getItem(progressKey) === 'true'; } catch { /* Session fallback when storage is unavailable. */ }
-const count = document.querySelector('#star-count');
-const updateCount = () => { if (count) count.textContent = completed ? '1' : '0'; };
-updateCount();
-window.addEventListener('storage', event => {
-  if (event.key === progressKey || event.key === null) {
-    try { completed = localStorage.getItem(progressKey) === 'true'; } catch { return; }
-    updateCount();
-  }
-});
+import { awardProgressStar } from './progress.js?v=1';
 function awardStar() {
   const message = document.querySelector('#star-message');
-  try { completed = completed || localStorage.getItem(progressKey) === 'true'; } catch { /* Keep session state. */ }
-  if (completed) {
+  const award = awardProgressStar('pulley');
+  if (!award.first) {
     message.textContent = '★ نجمتك محفوظة؛ يمكنك تكرار التجربة كما تشاء.';
-    updateCount();
     return;
   }
-  completed = true;
-  let saved = true;
-  try { localStorage.setItem(progressKey, 'true'); } catch { saved = false; }
-  updateCount();
-  message.textContent = saved ? '★ ربحت نجمة لأنك أكملت التجربة! الاختبار والاكتشاف يستحقان نجمة.' : '★ ربحت نجمة لهذه الجلسة! تعذّر حفظها على الجهاز.';
+  message.textContent = award.saved ? '★ ربحت نجمة لأنك أكملت التجربة! الاختبار والاكتشاف يستحقان نجمة.' : '★ ربحت نجمة لهذه الجلسة! تعذّر حفظها على الجهاز.';
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     message.animate([{ transform: 'scale(.95)', opacity: .3 }, { transform: 'scale(1.04)', opacity: 1 }, { transform: 'scale(1)', opacity: 1 }], { duration: 600, iterations: 1 });
   }

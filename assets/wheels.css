@@ -138,3 +138,22 @@ button:focus-visible { outline:3px solid var(--teal); outline-offset:4px; }
  .motion-steps [data-step] { padding:6px; }
 }
 .part-axle .touch-target { stroke:none; }
+.classification-check,.force-check { font:inherit; display:inline-block; border:0; border-radius:24px; min-height:46px; padding:10px 16px; margin-top:12px; background:var(--teal); color:white; cursor:pointer; }
+.classification-check:disabled,.force-check:disabled { opacity:.5; cursor:not-allowed; }
+.lesson-audio-control { display:flex; flex-direction:column; align-items:center; gap:5px; margin:10px 0 18px; }
+.lesson-audio-button { display:flex; align-items:center; justify-content:center; gap:10px; font:inherit; border:1px solid var(--teal); border-radius:28px; min-height:46px; padding:8px 18px; background:#fff9eb; color:var(--teal); cursor:pointer; }
+.lesson-audio-button:disabled { opacity:1; color:var(--muted); background:#edece3; cursor:not-allowed; border-color:#b5c9c1; }
+.audio-note { font-size:13px; color:var(--muted); }
+.lesson-result { position:relative; isolation:isolate; border:2px solid var(--teal); border-radius:24px; background:linear-gradient(120deg,#e0f5e8,#fff9e9); padding:28px; margin-bottom:20px; text-align:center; }
+.lesson-result h2 { font-size:clamp(26px,3.5vw,40px); }
+.lesson-result p { font-size:20px; line-height:1.9; margin:12px 0; }
+#lesson-score { font-weight:bold; color:var(--teal); }
+.result-stars { pointer-events:none; position:absolute; inset:0; overflow:hidden; border-radius:inherit; z-index:-1; }
+.result-stars span { position:absolute; left:50%; top:65%; font-size:30px; }
+.lesson-end-nav { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin:24px 0; }
+.lesson-end-nav .button { border-radius:30px; min-height:50px; font-size:18px; }
+.lesson-end-nav .secondary { background:transparent; border:1px solid var(--teal); color:var(--teal); }
+@media(max-width:600px) { .lesson-result { padding:22px 16px; } .lesson-result p { font-size:18px; } .lesson-end-nav { flex-direction:column; } .lesson-end-nav .button { text-align:center; width:100%; } .lesson-audio-button { font-size:16px; } }
+.result-stars { z-index:0; }
+.lesson-result > :not(.result-stars) { position:relative; z-index:1; }
+.wheels-lesson [hidden] { display:none !important; }
