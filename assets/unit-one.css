@@ -50,3 +50,7 @@ body:has(.unit-hero) main.wrap { width:calc(100% - 36px); max-width:1440px; }
   .unit-lesson p { font-size:17px; }
   .unit-lesson .button { font-size:18px; padding:10px 16px; }
 }
+/* Unit header no longer depends on having an embedded experiment. */
+body:has(.unit-hero) .site-header { width:100%; max-width:none; padding:12px max(24px,calc((100vw - 1440px)/2)); color:#fffdf7; }
+body:has(.unit-hero) .brand-mark { background:transparent; border-inline-end:2px solid var(--gold); border-radius:0; width:54px; }
+body:has(.unit-hero) .stars,body:has(.unit-hero) .nav-link { color:var(--navy); background:#fff9eb; border:1px solid #e6ded0; border-radius:32px; padding:7px 16px; }

@@ -76,3 +76,65 @@ button:focus-visible { outline:3px solid var(--teal); outline-offset:4px; }
   .answer-status,.hint-status { font-size:17px; }
 }
 .part-rope .touch-target { fill:none; pointer-events:stroke; }
+.section-content { padding:24px; }
+.section-content h3 { font-size:clamp(21px,2.4vw,30px); margin:12px 0 16px; }
+.section-content > p { font-size:19px; line-height:1.9; }
+.history-pictures { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.history-pictures figure,.history-cart { margin:0; padding:12px; border:2px solid #8fc4b9; border-radius:22px; background:#fffcf4; text-align:center; font:inherit; color:var(--navy); }
+.history-cart { cursor:pointer; }
+.history-pictures svg { width:100%; max-height:210px; }
+.history-message { background:#e1eee0; border-radius:16px; padding:12px; margin:14px 0 24px; }
+.part-axle.selected .axle-ink { fill:#008f91; stroke:#fffdf5; stroke-width:3; }
+.part-axle .touch-target { pointer-events:fill; }
+.system-tabs,.force-options { display:flex; gap:12px; flex-wrap:wrap; }
+.system-tabs button,.classification-retry,.force-retry { font:inherit; border:2px solid var(--teal); border-radius:18px; padding:10px 18px; min-height:48px; background:#fffdf7; color:var(--navy); cursor:pointer; }
+.system-tabs button { flex:1; font-weight:bold; }
+.system-tabs button[aria-pressed=true] { background:var(--teal); color:white; }
+.system-comparison { display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:center; margin-top:18px; border-radius:24px; background:#e4f1e6; padding:18px; }
+.system-comparison img { width:100%; max-height:280px; object-fit:contain; }
+.system-comparison p { font-size:23px; line-height:1.9; }
+#try .section-content > .experiment { border:0; margin-top:8px; padding-top:8px; }
+.experiment-grid > #pulley-title { grid-area:title; font-size:25px; text-align:center; padding:10px; }
+#try .experiment .pulley-scene { margin-top:0; }
+#try .experiment .intro-actions { display:none; }
+.bike-activity { border-top:1px solid var(--line); margin-top:24px; padding-top:20px; }
+.bike-diagram { display:block; width:min(100%,600px); margin:18px auto; background:#e5f2e8; border-radius:24px; }
+.bike-chain.in-motion { stroke:#D6A248; }
+.rear-wheel.in-motion { stroke:#008f91; }
+.bike-pedal.in-motion > circle { fill:#D6A248; stroke:#008f91; stroke-width:5; }
+.motion-steps { display:flex; align-items:center; justify-content:center; gap:10px; margin:14px 0; flex-wrap:wrap; }
+.motion-steps [data-step] { border-radius:16px; border:1px solid var(--line); padding:8px 12px; }
+.motion-steps .active { background:#f0dfb5; border-color:var(--gold); font-weight:bold; }
+#bike-status { padding:12px; line-height:1.9; font-size:20px; }
+.classification-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin:20px 0 28px; }
+.classification-card { border:1px solid #80b7ad; border-radius:22px; background:#fffdf7; padding:16px; }
+.classification-card img { display:block; width:100%; height:240px; object-fit:contain; }
+.classification-card label { display:block; font-weight:bold; margin:10px 0; }
+.classification-card select { font:inherit; width:100%; min-height:48px; color:var(--navy); border:2px solid var(--teal); background:white; border-radius:12px; padding:8px; }
+.class-status { min-height:120px; font-size:17px; line-height:1.9; margin-top:12px; }
+.force-question { border-top:1px solid var(--line); padding-top:24px; }
+.force-question fieldset { border:0; margin:0; padding:0; }
+.force-question legend { font-size:clamp(22px,2.8vw,32px); font-weight:bold; margin-bottom:18px; }
+.force-options label { flex:1; display:flex; align-items:center; gap:10px; border:2px solid var(--teal); border-radius:16px; padding:12px; min-height:54px; background:#fffdf7; cursor:pointer; }
+.force-options label:has(:checked) { background:#c8e8da; }
+.force-options input { accent-color:var(--teal); width:22px; height:22px; flex:none; }
+#force-feedback { font-size:20px; line-height:1.9; padding:16px 0; }
+@media(max-width:600px) {
+ .section-content { padding:16px; }
+ .history-pictures { gap:12px; }
+ .history-pictures figure,.history-cart { padding:8px; font-size:15px; }
+ .section-content .learn-body { padding:12px 0; }
+ .part-buttons { flex-wrap:wrap; }
+ .part-buttons button { min-width:30%; }
+ .system-comparison { grid-template-columns:1fr; padding:12px; gap:12px; }
+ .system-comparison p { font-size:20px; }
+ .system-tabs { gap:6px; }
+ .system-tabs button { padding:10px 8px; font-size:16px; }
+ .classification-grid { grid-template-columns:1fr; }
+ .classification-card img { height:220px; }
+ .class-status { min-height:0; }
+ .force-options { flex-direction:column; }
+ .motion-steps { font-size:14px; gap:5px; }
+ .motion-steps [data-step] { padding:6px; }
+}
+.part-axle .touch-target { stroke:none; }
