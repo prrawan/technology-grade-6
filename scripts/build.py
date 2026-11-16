@@ -1,5 +1,6 @@
 """Build the Arabic book website with Python's standard library."""
 import json
+import hashlib
 import shutil
 from html import escape
 from pathlib import Path
@@ -25,7 +26,7 @@ def page(path, title, content):
     target = OUT / path
     target.parent.mkdir(parents=True, exist_ok=True)
     depth = len(Path(path).parts) - 1
-    target.write_text(LAYOUT.substitute(title=escape('رحلة التكنولوجيا | الصف السادس الأساسي' if title == 'الرئيسية' else title), root='../' * depth, content=content, extra_styles='<link rel="stylesheet" href="assets/homepage.css">' if path == 'index.html' else '<link rel="stylesheet" href="../../assets/unit-experiment.css"><link rel="stylesheet" href="../../assets/unit-one.css">' if path == 'units/thinking-technology/index.html' else ''))
+    target.write_text(LAYOUT.substitute(title=escape('رحلة التكنولوجيا | الصف السادس الأساسي' if title == 'الرئيسية' else title), root='../' * depth, content=content, experiment_version=hashlib.sha256((ROOT / 'assets/experiment.js').read_bytes()).hexdigest()[:12], extra_styles='<link rel="stylesheet" href="assets/homepage.css">' if path == 'index.html' else '<link rel="stylesheet" href="../../assets/unit-experiment.css"><link rel="stylesheet" href="../../assets/unit-one.css">' if path == 'units/thinking-technology/index.html' else ''))
 
 
 def card(title, label, symbol, href=None, description=None):
