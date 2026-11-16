@@ -86,3 +86,5 @@ body:has(.experiment) main.wrap { width:calc(100% - 40px); max-width:1440px; }
 /* The complete experiment now lives inside unit one. */
 .experiment-grid > #pulley-title { grid-area:title; direction:rtl; font-size:30px; padding:8px 10px 16px; text-align:center; }
 #pulley-experiment { border-top:1px solid var(--line); margin-top:28px; padding-top:28px; scroll-margin-top:20px; }
+/* Lin is a single native SVG image, sharing Yazan's y=400 shoe baseline. */
+#pulley-experiment .scene-lin { position:static; width:190px; height:356px; transform:none; }
