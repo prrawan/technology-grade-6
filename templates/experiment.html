@@ -6,20 +6,21 @@
 
 
 <svg viewBox="0 20 600 400" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-<g class="lin-anchor" direction="ltr" transform="translate(262 0) scale(-1 1)"><image class="scene-lin" href="assets/characters/lin-welcome-scene.png" x="36" y="44" width="190" height="356" preserveAspectRatio="xMidYMax meet"/></g>
+<g class="lin-anchor" direction="ltr" transform="translate(262 0) scale(-1 1)"><image class="scene-lin" href="assets/characters/lin-welcome-3d-scene.png" x="36" y="44" width="190" height="356" preserveAspectRatio="xMidYMax meet"/></g>
 <ellipse cx="300" cy="403" rx="264" ry="7" fill="#83c7be55"/>
 <path d="M210 35h180M300 35v45" stroke="#18273D" stroke-width="9"/>
-<circle cx="300" cy="105" r="30" fill="#D6A248" stroke="#18273D" stroke-width="4"/>
-<circle cx="300" cy="105" r="8" fill="#18273D"/>
+<circle cx="303" cy="108" r="30" fill="#0b5159"/><circle cx="300" cy="105" r="30" fill="#126C70" stroke="#0b5159" stroke-width="2"/><circle cx="300" cy="105" r="25" fill="none" stroke="#a7ded0" stroke-width="1.5"/>
+<circle cx="300" cy="105" r="9" fill="#D6A248"/><circle cx="300" cy="105" r="4" fill="#18273D"/>
 <path id="rope" d="M270 300V105a30 30 0 0 1 60 0v30" fill="none" stroke="#a3722c" stroke-width="6"/>
-<g id="load"><rect x="234" y="300" width="72" height="62" rx="5" fill="#D6A248" stroke="#18273D" stroke-width="3"/><path d="M250 300v62m40-62v62" stroke="#f7f3e8" stroke-width="4"/></g>
+<g id="load"><path d="M234 300l5-5h72l-5 5z" fill="#f0d599"/><path d="M306 300l5-5v62l-5 5z" fill="#91602b"/><rect x="234" y="300" width="72" height="62" rx="3" fill="#D6A248" stroke="#95652e" stroke-width="2"/><path d="M241 307h58v48h-58zM241 307l58 48m-58 0 58-48" fill="none" stroke="#f6d899" stroke-width="4"/></g>
 <defs>
 <clipPath id="forearm-clip" clipPathUnits="userSpaceOnUse"><path d="M98 257L112 247L138 255L144 294L197 321L211 340L195 368L169 369L129 333L101 321L90 300L91 273Z"/></clipPath>
-<mask id="body-without-forearm" maskUnits="userSpaceOnUse" x="0" y="0" width="724" height="1086"><rect width="724" height="1086" fill="white"/><path d="M98 257L112 247L138 255L144 294L197 321L211 340L195 368L169 369L129 333L101 321L90 300L91 273Z" fill="black"/><rect x="107" y="188" width="25" height="190" fill="black"/></mask>
+<mask id="body-without-forearm" maskUnits="userSpaceOnUse" x="0" y="0" width="724" height="1086"><rect width="724" height="1086" fill="white"/><path d="M98 257L112 247L138 255L144 294L197 321L211 340L195 368L169 369L129 333L101 321L90 300L91 273Z" fill="black"/><rect x="80" y="175" width="85" height="203" fill="black"/></mask>
+<mask id="forearm-without-rope" maskUnits="userSpaceOnUse" x="0" y="0" width="724" height="1086"><rect width="724" height="1086" fill="white"/><rect x="100" y="188" width="43" height="67" fill="black"/><rect x="100" y="320" width="32" height="65" fill="black"/></mask>
 </defs>
 <g transform="translate(290 40) scale(.3314917127)">
-<image href="assets/characters/yazan-grip-start.png" width="724" height="1086" mask="url(#body-without-forearm)"/>
-<g id="yazan-forearm"><image href="assets/characters/yazan-grip-start.png" width="724" height="1086" clip-path="url(#forearm-clip)"/></g>
+<image href="assets/characters/yazan-grip-start-3d.png" width="724" height="1086" mask="url(#body-without-forearm)"/>
+<g id="yazan-forearm"><image href="assets/characters/yazan-grip-start-3d.png" width="724" height="1086" clip-path="url(#forearm-clip)" mask="url(#forearm-without-rope)"/></g>
 </g>
 </svg>
 <span class="scene-label">البَكَرَة الثابتة</span>

@@ -30,7 +30,7 @@ if (scene) {
   const characterRoot = new URL('.', new URL(lin.getAttribute('href'), document.baseURI)).href;
   function setLinPose(pointing) {
     // Native SVG image: one figure, fixed shoe baseline, pose-specific horizontal anchor.
-    lin.setAttribute('href', `${characterRoot}lin-${pointing ? 'point' : 'welcome'}-scene.png`);
+    lin.setAttribute('href', `${characterRoot}lin-${pointing ? 'point' : 'welcome'}-3d-scene.png`);
     lin.setAttribute('x', pointing ? '10.26' : '36');
     lin.setAttribute('aria-label', pointing ? 'لين تشير إلى الصندوق المرتفع' : 'لين تراقب الصندوق');
   }

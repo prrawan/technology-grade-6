@@ -1,4 +1,5 @@
 """Build the Arabic book website with Python's standard library."""
+from illustrations import render_inline, render_svg
 import json
 import hashlib
 import re
@@ -52,7 +53,16 @@ def page(path, title, content):
     for name in modules:
         digest = hashlib.sha256((ROOT / 'assets' / name).read_bytes()).hexdigest()[:12]
         extra.append(f'<script type="module" src="{prefix}assets/{name}?v={digest}"></script>')
-    target.write_text(LAYOUT.substitute(title=escape('رحلة التكنولوجيا | الصف السادس الأساسي' if title == 'الرئيسية' else title), root=prefix, content=content, experiment_version=hashlib.sha256((ROOT / 'assets/experiment.js').read_bytes()).hexdigest()[:12], extra_styles='\n'.join(extra)))
+    # Version every local image so Pages cannot mix old flat art with new materials.
+    def version_image(match):
+        relative = match[2]
+        asset = ROOT / 'assets' / relative.split('assets/', 1)[1]
+        built = OUT / 'assets' / relative.split('assets/', 1)[1]
+        digest = hashlib.sha256((built if built.exists() else asset).read_bytes()).hexdigest()[:12]
+        return match[1] + relative + '?v=' + digest + match[3]
+    content = re.sub(r'(src=")([^"?]*assets/[^"?]+\.(?:png|svg))(")', version_image, content)
+    content = render_inline(content, "art-" + re.sub(r"[^a-z0-9]", "-", path))
+    target.write_text(LAYOUT.substitute(title=escape('رحلة التكنولوجيا | الصف السادس الأساسي' if title == 'الرئيسية' else title), root=prefix, content=content, brand_mark_version=hashlib.sha256((OUT / 'assets/brand-3d/book-lamp.svg').read_bytes()).hexdigest()[:12], experiment_version=hashlib.sha256((ROOT / 'assets/experiment.js').read_bytes()).hexdigest()[:12], extra_styles='\n'.join(extra)))
 
 
 def brand_icon(name):
@@ -113,7 +123,7 @@ def lesson_audio(lesson, kind, label):
     note = 'اضغط للاستماع.' if source else 'الصوت قريبًا'
     transcript = lesson.get('audio_transcripts', {}).get(kind, '')
     transcript_attr = f' data-transcript="{escape(transcript, quote=True)}"' if transcript else ''
-    return f'<div class="lesson-audio-control"{transcript_attr}><button type="button" class="lesson-audio-button" data-audio="{audio_id}" data-label="{label}"{disabled}><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 14v-3a8 8 0 0 1 16 0v3M4 12H2v7h4v-7zm16 0h2v7h-4v-7z"/></svg><span>{label}</span></button><small class="audio-note">{note}</small><audio id="{audio_id}" preload="none"{src}></audio></div>'
+    return f'<div class="lesson-audio-control"{transcript_attr}><button type="button" class="lesson-audio-button" data-audio="{audio_id}" data-label="{label}"{disabled}><img class="audio-icon" src="../../assets/brand-3d/headphones.svg" width="26" height="26" alt=""><span>{label}</span></button><small class="audio-note">{note}</small><audio id="{audio_id}" preload="none"{src}></audio></div>'
 
 
 def characters(scene):
@@ -126,6 +136,9 @@ def characters(scene):
 def build():
     OUT.mkdir(exist_ok=True)
     shutil.copytree(ROOT / 'assets', OUT / 'assets', dirs_exist_ok=True)
+    for source in (ROOT / 'assets').rglob('*.svg'):
+        relative = source.relative_to(ROOT / 'assets')
+        (OUT / 'assets' / relative).write_text(render_svg(source.read_text(), 'asset-' + re.sub(r'[^a-z0-9]', '-', str(relative))))
     book = json.loads((ROOT / 'units/book.json').read_text())
     COURSE_CATALOG.clear()
     for entry in book:
