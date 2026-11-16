@@ -1,5 +1,5 @@
 import { awardProgressStar, hasProgressStar } from './progress.js?v=1';
-import { bindLessonAudio } from './lesson-audio.js?v=1';
+import { bindLessonAudio, stopLessonAudio } from './lesson-audio.js?v=2';
 bindLessonAudio();
 const descriptions = {
   wheel: 'العجلة: تدور عندما يتحرّك الحبل.',
@@ -67,6 +67,9 @@ function updateResult() {
   if (!resultShown) return;
   resultCard.hidden = false;
   const complete = correct === answers.length;
+  const congratulationsAudio = document.querySelector('#lesson-congratulations-audio');
+  congratulationsAudio.hidden = !complete;
+  if (!complete) stopLessonAudio(congratulationsAudio);
   document.querySelector('#lesson-score').textContent = `الإجابات الصحيحة: ${correct} من ${answers.length}.` + (verified < answers.length ? ` أجبت عن ${verified} من ${answers.length} أسئلة؛ تحقّق من المحاولات الجديدة.` : '');
   document.querySelector('#result-title').textContent = complete ? 'أحسنت! أكملت الدرس' : 'نتيجتك في الدرس';
   document.querySelector('#completion-message').textContent = complete ? 'ميّزت بين أنظمة البَكرات واخترت النظام المناسب لرفع الحمل' : 'بعض الإجابات تحتاج إلى المراجعة. يمكنك تصحيحها ثم التحقّق من جديد.';

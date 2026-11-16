@@ -8,7 +8,28 @@
       "icon": "wheel",
       "audio": {
         "intro": null,
-        "explanation": null
+        "explanation": null,
+        "pulley_up": null,
+        "pulley_down": null,
+        "congratulations": null
+      },
+      "audio_transcripts": {
+        "pulley_up": "أحسنت! ارتفع الصندوق مثل ما توقّعت. لما سحبنا الحبل إلى أسفل، غيّرت البَكرة الثابتة اتجاه السحب فارتفع الصندوق",
+        "pulley_down": "شوف شو صار! الصندوق ارتفع. لما سحبنا الحبل إلى أسفل، غيّرت البَكرة الثابتة اتجاه السحب فارتفع الصندوق",
+        "congratulations": "أحسنت! تعرّفت إلى أنواع البَكرات واخترت النظام المناسب لرفع الحمل. صرت جاهز تكمّل رحلتك مع إلكترونيات في بيتي!"
+      },
+      "audio_sections": {
+        "explanation": [
+          "العجلة: سؤال حياة الناس قبل اختراع العجلة ثم العجلة الحجرية والزلّاجة بعجلات خشبية",
+          "البَكرة: العجلة والمحور والحبل ووظائفها ثم مقارنة الثابتة والمتحركة والمركّبة"
+        ]
+      },
+      "audio_paths": {
+        "intro": "assets/audio/wheels-intro.mp3",
+        "explanation": "assets/audio/wheels-explanation.mp3",
+        "pulley_up": "assets/audio/wheels-pulley-comment-up.mp3",
+        "pulley_down": "assets/audio/wheels-pulley-comment-down.mp3",
+        "congratulations": "assets/audio/wheels-congratulations.mp3"
       }
     },
     {

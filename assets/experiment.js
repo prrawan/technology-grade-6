@@ -1,3 +1,4 @@
+import { stopLessonAudio } from './lesson-audio.js?v=2';
 import { awardProgressStar } from './progress.js?v=1';
 function awardStar() {
   const message = document.querySelector('#star-message');
@@ -40,6 +41,7 @@ if (scene) {
   const summary = document.querySelector('#prediction-summary');
   const feedback = document.querySelector('#feedback');
   const actions = document.querySelector('#result-actions');
+  const commentary = document.querySelector('#pulley-audio-commentary');
   const rope = document.querySelector('#rope');
   const load = document.querySelector('#load');
   const arm = document.querySelector('#yazan-forearm');
@@ -95,6 +97,10 @@ if (scene) {
       render(1);
       setLinPose(true);
       feedback.innerHTML = `توقّعك: <strong>${prediction === 'up' ? 'إلى أعلى' : 'إلى أسفل'}</strong>. النتيجة: <strong>ارتفع الصندوق</strong>. ${prediction === 'up' ? 'أحسنت! وافقت النتيجة توقّعك.' : 'توقّعت نزول الصندوق؛ لاحظ أنه ارتفع.'} عندما نسحب الحبل إلى أسفل، يرتفع الصندوق. <strong>البَكرة الثابتة غيّرت اتجاه السحب</strong>.`;
+      if (commentary) {
+        commentary.querySelectorAll('[data-commentary]').forEach(panel => { panel.hidden = panel.dataset.commentary !== prediction; });
+        commentary.hidden = false;
+      }
       actions.hidden = false;
       awardStar();
     };
@@ -112,6 +118,11 @@ if (scene) {
     predictionValue = null;
     choices.forEach(choice => { choice.checked = false; choice.disabled = false; });
     render(0);
+    stopLessonAudio(commentary);
+    if (commentary) {
+      commentary.hidden = true;
+      commentary.querySelectorAll('[data-commentary]').forEach(panel => panel.hidden = true);
+    }
     actions.hidden = true;
     document.querySelector('#star-message').textContent = '';
     pull.disabled = true;

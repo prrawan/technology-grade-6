@@ -58,6 +58,14 @@ def unit_experiment():
 def lesson_audio(lesson, kind, label):
     audio_id = f'lesson-audio-{kind}'
     source = lesson.get('audio', {}).get(kind)
+    if not source:
+        planned = lesson.get('audio_paths', {}).get(kind)
+        if planned:
+            candidate = Path(planned)
+            if candidate.is_absolute() or '..' in candidate.parts:
+                raise ValueError(f'Invalid planned audio path: {planned}')
+            if (ROOT / candidate).is_file():
+                source = planned
     if source:
         audio_path = Path(source)
         if audio_path.is_absolute() or '..' in audio_path.parts or not (ROOT / audio_path).is_file():
@@ -65,7 +73,9 @@ def lesson_audio(lesson, kind, label):
     src = f' src="../../{escape(source, quote=True)}"' if source else ''
     disabled = '' if source else ' disabled'
     note = 'اضغط للاستماع.' if source else 'الصوت قريبًا'
-    return f'<div class="lesson-audio-control"><button type="button" class="lesson-audio-button" data-audio="{audio_id}" data-label="{label}"{disabled}><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 14v-3a8 8 0 0 1 16 0v3M4 12H2v7h4v-7zm16 0h2v7h-4v-7z"/></svg><span>{label}</span></button><small class="audio-note">{note}</small><audio id="{audio_id}" preload="none"{src}></audio></div>'
+    transcript = lesson.get('audio_transcripts', {}).get(kind, '')
+    transcript_attr = f' data-transcript="{escape(transcript, quote=True)}"' if transcript else ''
+    return f'<div class="lesson-audio-control"{transcript_attr}><button type="button" class="lesson-audio-button" data-audio="{audio_id}" data-label="{label}"{disabled}><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 14v-3a8 8 0 0 1 16 0v3M4 12H2v7h4v-7zm16 0h2v7h-4v-7z"/></svg><span>{label}</span></button><small class="audio-note">{note}</small><audio id="{audio_id}" preload="none"{src}></audio></div>'
 
 
 def characters(scene):
@@ -100,7 +110,7 @@ def build():
                     for identity in ids:
                         scene = scene.replace(f'id="{identity}"', f'id="hero-{identity}"').replace(f'url(#{identity})', f'url(#hero-{identity})')
                     activity = unit_experiment().replace('href="world-of-wheels.html"', 'href="#apply"').replace('تابع درس عالم من عجلات', 'تابع إلى طبّق')
-                    content = (ROOT / 'templates/world-of-wheels.html').read_text().replace('$scene', scene).replace('$experiment', activity).replace('$intro_audio', lesson_audio(lesson, 'intro', 'استمع إلى مقدّمة الدرس')).replace('$explanation_audio', lesson_audio(lesson, 'explanation', 'استمع إلى الشرح'))
+                    content = (ROOT / 'templates/world-of-wheels.html').read_text().replace('$scene', scene).replace('$experiment', activity).replace('$intro_audio', lesson_audio(lesson, 'intro', 'استمع إلى مقدّمة الدرس')).replace('$explanation_audio', lesson_audio(lesson, 'explanation', 'استمع إلى الشرح')).replace('$pulley_commentary', '<div id="pulley-audio-commentary" hidden><div data-commentary="up" hidden>' + lesson_audio(lesson, 'pulley_up', 'استمع إلى التعليق') + '</div><div data-commentary="down" hidden>' + lesson_audio(lesson, 'pulley_down', 'استمع إلى التعليق') + '</div></div>').replace('$congratulations_audio', lesson_audio(lesson, 'congratulations', 'استمع إلى التهنئة'))
                 page(f'{unit_path}/{lesson["slug"]}.html', lesson['title'], content)
             content = f'''<nav class="breadcrumb" aria-label="مسار الصفحة"><a href="../../index.html#book-map">خريطة الكتاب</a><span aria-hidden="true">/</span><span aria-current="page">{escape(unit['title'])}</span></nav><section class="unit-intro"><div class="page-intro"><div class="eyebrow">الوحدة {number:02}</div><h1>{escape(unit['title'])}</h1><p class="intro">خطوتك الأولى في رحلة التكنولوجيا. اختر درسًا لتفتح صفحته التمهيدية.</p></div></section><section aria-labelledby="lessons-title"><div class="section-heading"><h2 id="lessons-title">دروس الوحدة</h2><p>درسان، وبداية جديدة للاكتشاف</p></div><div class="grid lessons">{''.join(lesson_cards)}</div></section><p style="margin-top:28px"><a class="back-link" href="../../index.html#book-map">← العودة إلى خريطة الكتاب</a></p>'''
             page(f'{unit_path}/index.html', unit['title'], (ROOT / 'templates/unit-one.html').read_text() if number == 1 else content)

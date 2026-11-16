@@ -20,10 +20,19 @@ export function bindLessonAudio() {
       document.querySelectorAll('.lesson-audio-control audio').forEach(other => { if (other !== audio) other.pause(); });
       if (audio.ended) audio.currentTime = 0;
       try { await audio.play(); note.textContent = 'يمكنك الإيقاف المؤقت والمتابعة من الزر نفسه.'; }
-      catch { note.textContent = 'تعذّر تشغيل التسجيل. اضغط للمحاولة مرة أخرى.'; }
+      catch (error) { if (error.name !== 'AbortError') note.textContent = 'تعذّر تشغيل التسجيل. اضغط للمحاولة مرة أخرى.'; }
       update();
     });
     for (const name of ['play', 'pause', 'ended']) audio.addEventListener(name, update);
     audio.addEventListener('error', () => { note.textContent = 'تعذّر تحميل التسجيل.'; audio.pause(); update(); });
+  });
+}
+
+// Stop context-specific recordings before hiding/resetting their result.
+export function stopLessonAudio(container) {
+  container?.querySelectorAll('audio').forEach(audio => {
+    audio.pause();
+    if (audio.readyState > 0) audio.currentTime = 0;
+    audio.dispatchEvent(new Event('pause'));
   });
 }
