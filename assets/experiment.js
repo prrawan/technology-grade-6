@@ -52,13 +52,21 @@ if (scene) {
   const arm = document.querySelector('#yazan-forearm');
   let busy = false;
   let predictionValue = null;
-  choices.forEach(choice => choice.addEventListener('change', () => {
+  function syncPrediction() {
     if (busy) return;
-    predictionValue = choice.value;
-    pull.disabled = false;
-    summary.textContent = `توقّعك: الصندوق سيتحرّك ${choice.value === 'up' ? 'إلى أعلى' : 'إلى أسفل'}`;
-    feedback.textContent = 'اضغط اسحب الحبل لتجربة توقّعك.';
-  }));
+    const choice = choices.find(input => input.checked);
+    predictionValue = choice?.value ?? null;
+    pull.disabled = !predictionValue;
+    summary.textContent = choice
+      ? `توقّعك: الصندوق سيتحرّك ${choice.value === 'up' ? 'إلى أعلى' : 'إلى أسفل'}`
+      : 'اختر توقّعك لتبدأ.';
+    feedback.textContent = choice ? 'اضغط اسحب الحبل لتجربة توقّعك.' : 'اختر توقّعك أولًا لتفعيل السحب.';
+  }
+  choices.forEach(choice => {
+    for (const event of ['input', 'change', 'click']) choice.addEventListener(event, syncPrediction);
+  });
+  window.addEventListener('pageshow', syncPrediction);
+  syncPrediction();
   function render(progress) {
     // Rotate the extracted forearm around its elbow in source-image coordinates.
     const angle = -110 * progress;
@@ -84,6 +92,7 @@ if (scene) {
   }
   render(0);
   pull.addEventListener('click', () => {
+    syncPrediction();
     const prediction = predictionValue;
     if (busy || !prediction) return;
     busy = true;
