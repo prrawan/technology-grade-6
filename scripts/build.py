@@ -45,8 +45,7 @@ def page(path, title, content):
         serialized = json.dumps(COURSE_CATALOG, ensure_ascii=False).replace('<', '\\u003c')
         extra.append(f'<script type="application/json" id="course-catalog" data-root="{prefix}">{serialized}</script>')
         content += (ROOT / 'templates/certificate-dialog.html').read_text()
-    if path in ('index.html', 'units/thinking-technology/index.html'):
-        styles.append('brand-3d.css')
+    styles.append('brand-3d.css')
     for name in styles:
         digest = hashlib.sha256((ROOT / 'assets' / name).read_bytes()).hexdigest()[:12]
         extra.append(f'<link rel="stylesheet" href="{prefix}assets/{name}?v={digest}">')
@@ -62,7 +61,7 @@ def brand_icon(name):
 
 def certificate_card(unit_id):
     content = (ROOT / 'templates/certificate-card.html').read_text().replace('$unit_id', unit_id)
-    if unit_id == 'thinking-technology':
+    if unit_id:
         content = re.sub(r'<svg.*?</svg>', brand_icon('certificate'), content, flags=re.S)
     return content
 
