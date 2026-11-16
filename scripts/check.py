@@ -44,7 +44,7 @@ class Document(HTMLParser):
 
 
 docs = {p.resolve(): Document(p) for p in ROOT.rglob('*.html')}
-assert len(docs) == 4, 'Expected home, one unit, and two lesson pages'
+assert len(docs) == 9, 'Expected home, three units, two lessons, and three hub pages'
 for path, doc in docs.items():
     assert doc.language == ('ar', 'rtl'), path
     assert doc.headings, path
@@ -77,4 +77,5 @@ print('PASS: all page links, anchors, stylesheets, Arabic/RTL, and unavailable u
 assert 'id="pull"' not in (ROOT / 'index.html').read_text()
 assert 'id="pull"' not in unit_path.read_text()
 assert 'id="pull"' in (ROOT / 'units/thinking-technology/world-of-wheels.html').read_text()
-assert any(link.endswith('#pulley-experiment') for link in home.links)
+assert 'نشاط تفاعلي' not in (ROOT / 'index.html').read_text()
+assert {'portfolio.html', 'challenges.html', 'about.html'} <= set(home.links)

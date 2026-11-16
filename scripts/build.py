@@ -9,6 +9,7 @@ from string import Template
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'dist'
+COURSE_CATALOG = []
 LAYOUT = Template((ROOT / 'templates/page.html').read_text())
 ICONS = {
     'bulb': '<path d="M9 18c0-3-4-4-4-9a7 7 0 0 1 14 0c0 5-4 6-4 9M9 18h6M9 21h6M12 18v-7m-3-2 3 2 3-2"/>',
@@ -26,8 +27,35 @@ def icon(name):
 def page(path, title, content):
     target = OUT / path
     target.parent.mkdir(parents=True, exist_ok=True)
-    depth = len(Path(path).parts) - 1
-    target.write_text(LAYOUT.substitute(title=escape('رحلة التكنولوجيا | الصف السادس الأساسي' if title == 'الرئيسية' else title), root='../' * depth, content=content, experiment_version=hashlib.sha256((ROOT / 'assets/experiment.js').read_bytes()).hexdigest()[:12], extra_styles='<link rel="stylesheet" href="assets/homepage.css">' if path == 'index.html' else '<link rel="stylesheet" href="../../assets/unit-experiment.css"><link rel="stylesheet" href="../../assets/unit-one.css">' if path == 'units/thinking-technology/index.html' else '<link rel="stylesheet" href="../../assets/unit-experiment.css"><link rel="stylesheet" href="../../assets/wheels.css?v=' + hashlib.sha256((ROOT / 'assets/wheels.css').read_bytes()).hexdigest()[:12] + '"><script type="module" src="../../assets/wheels.js?v=' + hashlib.sha256((ROOT / 'assets/wheels.js').read_bytes()).hexdigest()[:12] + '"></script>' if path == 'units/thinking-technology/world-of-wheels.html' else '<link rel="stylesheet" href="../../assets/wheels.css?v=' + hashlib.sha256((ROOT / 'assets/wheels.css').read_bytes()).hexdigest()[:12] + '"><link rel="stylesheet" href="../../assets/electronics.css?v=' + hashlib.sha256((ROOT / 'assets/electronics.css').read_bytes()).hexdigest()[:12] + '"><script type="module" src="../../assets/electronics.js?v=' + hashlib.sha256((ROOT / 'assets/electronics.js').read_bytes()).hexdigest()[:12] + '"></script>' if path == 'units/thinking-technology/electronics-at-home.html' else ''))
+    prefix = '../' * (len(Path(path).parts) - 1)
+    styles, modules = [], []
+    if path == 'index.html':
+        styles = ['homepage.css']
+    elif path == 'units/thinking-technology/index.html':
+        styles = ['unit-experiment.css', 'unit-one.css']
+    elif path == 'units/thinking-technology/world-of-wheels.html':
+        styles, modules = ['unit-experiment.css', 'wheels.css'], ['wheels.js']
+    elif path == 'units/thinking-technology/electronics-at-home.html':
+        styles, modules = ['wheels.css', 'electronics.css'], ['electronics.js']
+    course_page = path in ('index.html', 'portfolio.html', 'challenges.html', 'about.html') or path.startswith('units/') and path.endswith('/index.html')
+    extra = []
+    if course_page:
+        styles.append('course.css')
+        modules.append('course-ui.js')
+        serialized = json.dumps(COURSE_CATALOG, ensure_ascii=False).replace('<', '\\u003c')
+        extra.append(f'<script type="application/json" id="course-catalog" data-root="{prefix}">{serialized}</script>')
+        content += (ROOT / 'templates/certificate-dialog.html').read_text()
+    for name in styles:
+        digest = hashlib.sha256((ROOT / 'assets' / name).read_bytes()).hexdigest()[:12]
+        extra.append(f'<link rel="stylesheet" href="{prefix}assets/{name}?v={digest}">')
+    for name in modules:
+        digest = hashlib.sha256((ROOT / 'assets' / name).read_bytes()).hexdigest()[:12]
+        extra.append(f'<script type="module" src="{prefix}assets/{name}?v={digest}"></script>')
+    target.write_text(LAYOUT.substitute(title=escape('رحلة التكنولوجيا | الصف السادس الأساسي' if title == 'الرئيسية' else title), root=prefix, content=content, experiment_version=hashlib.sha256((ROOT / 'assets/experiment.js').read_bytes()).hexdigest()[:12], extra_styles='\n'.join(extra)))
+
+
+def certificate_card(unit_id):
+    return (ROOT / 'templates/certificate-card.html').read_text().replace('$unit_id', unit_id)
 
 
 def card(title, label, symbol, href=None, description=None):
@@ -40,11 +68,12 @@ def card(title, label, symbol, href=None, description=None):
 
 
 def station(entry, number, href):
-    title = escape(entry['title'])
-    start = f'<a class="station-start" href="{href}"><svg aria-hidden="true" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 4q5-3 10 0 5-3 10 0v16q-5-3-10 0-5-3-10 0zM12 4v16"/></svg> الدروس</a>' if href else '<span class="station-start pending"><svg aria-hidden="true" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 4q5-3 10 0 5-3 10 0v16q-5-3-10 0-5-3-10 0zM12 4v16"/></svg> الدروس <small>قريبًا</small></span>'
-    activity = '<a href="units/thinking-technology/world-of-wheels.html#pulley-experiment" aria-label="نشاط تفاعلي: جرّب البكرة"><span aria-hidden="true">🧩</span> نشاط تفاعلي</a>' if href else '<span><span aria-hidden="true">🧩</span> نشاط تفاعلي <small>قريبًا</small></span>'
+    book_icon = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4q5-3 10 0 5-3 10 0v16q-5-3-10 0-5-3-10 0zM12 4v16"/></svg>'
+    trophy = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h10v6c0 8-10 8-10 0zM7 5H3v4q0 5 6 5m8-9h4v4q0 5-6 5M12 17v4m-5 1h10"/></svg>'
+    lessons = f'<a class="station-start unit-map-option" href="{href}">{book_icon}<span>الدروس</span></a>' if href else f'<button class="unit-map-option" disabled>{book_icon}<span>الدروس <small>قريبًا</small></span></button>'
+    challenge = f'<a class="unit-map-option" href="{escape(entry["challenge_url"])}">{trophy}<span>تحدّي الوحدة</span></a>' if entry.get('challenge_url') else f'<button class="unit-map-option" disabled>{trophy}<span>تحدّي الوحدة <small>قريبًا</small></span></button>'
     status = '' if href else '<span class="badge">قيد الإعداد</span>'
-    return f'<article class="station{' station-ready' if href else ''}"><div class="station-heading">{icon(entry["icon"])}<div><small>الوحدة {number:02}</small><h3>{title}</h3>{status}</div></div>{start}<div class="station-options">{activity}<span><span aria-hidden="true">🏆</span> تحدّي الوحدة <small>قريبًا</small></span></div></article>'
+    return f'<article class="unit-map-card{' featured' if href else ''}"><div class="unit-map-heading">{icon(entry["icon"])}<h3>{escape(entry["title"])}</h3>{status}</div><div class="unit-map-actions">{lessons}{challenge}</div></article>'
 
 
 def unit_experiment():
@@ -89,6 +118,15 @@ def build():
     OUT.mkdir(exist_ok=True)
     shutil.copytree(ROOT / 'assets', OUT / 'assets', dirs_exist_ok=True)
     book = json.loads((ROOT / 'units/book.json').read_text())
+    COURSE_CATALOG.clear()
+    for entry in book:
+        data = json.loads((ROOT / 'units' / entry['directory'] / 'unit.json').read_text()) if entry.get('directory') else None
+        slug = data['slug'] if data else entry['slug']
+        COURSE_CATALOG.append({
+            'id': slug, 'title': entry['title'], 'href': f'units/{slug}/index.html',
+            'lessons': [{'title': lesson['title'], 'key': f'technology-grade-6:{lesson["slug"]}-completed:v1'} for lesson in data['lessons']] if data else [],
+            'challenge': {'href': entry.get('challenge_url'), 'key': f'technology-grade-6:{slug}-challenge-completed:v1'},
+        })
     cards = []
     for number, entry in enumerate(book, 1):
         unit = None
@@ -117,9 +155,15 @@ def build():
                         content = content.replace(f'$audio_{kind}', lesson_audio(lesson, kind, label))
                 page(f'{unit_path}/{lesson["slug"]}.html', lesson['title'], content)
             content = f'''<nav class="breadcrumb" aria-label="مسار الصفحة"><a href="../../index.html#book-map">خريطة الكتاب</a><span aria-hidden="true">/</span><span aria-current="page">{escape(unit['title'])}</span></nav><section class="unit-intro"><div class="page-intro"><div class="eyebrow">الوحدة {number:02}</div><h1>{escape(unit['title'])}</h1><p class="intro">خطوتك الأولى في رحلة التكنولوجيا. اختر درسًا لتفتح صفحته التمهيدية.</p></div></section><section aria-labelledby="lessons-title"><div class="section-heading"><h2 id="lessons-title">دروس الوحدة</h2><p>درسان، وبداية جديدة للاكتشاف</p></div><div class="grid lessons">{''.join(lesson_cards)}</div></section><p style="margin-top:28px"><a class="back-link" href="../../index.html#book-map">← العودة إلى خريطة الكتاب</a></p>'''
-            page(f'{unit_path}/index.html', unit['title'], (ROOT / 'templates/unit-one.html').read_text() if number == 1 else content)
+            page(f'{unit_path}/index.html', unit['title'], (ROOT / 'templates/unit-one.html').read_text() + certificate_card(unit['slug']) if number == 1 else content + certificate_card(unit['slug']))
+    for entry in book:
+        if not entry.get('directory'):
+            placeholder = f'<section class="course-hub"><h1>{escape(entry["title"])}</h1><p>دروس هذه الوحدة قيد الإعداد.</p><a class="back-link" href="../../index.html#book-map">← العودة إلى خريطة الوحدات</a></section>'
+            page(f'units/{entry["slug"]}/index.html', entry['title'], placeholder + certificate_card(entry['slug']))
+    for slug, title in [('portfolio', 'ملف إنجازي'), ('challenges', 'التحدّيات'), ('about', 'عن المشروع')]:
+        page(f'{slug}.html', title, (ROOT / f'templates/{slug}.html').read_text())
     content = f'''{(ROOT / "templates/home.html").read_text()}<section id="book-map" aria-labelledby="map-title"><div class="section-heading"><div><div class="eyebrow">مسارك في هذا الكتاب</div><h2 id="map-title">خريطة الوحدات</h2></div><p>ثلاث وحدات مرتّبة حسب المنهج</p></div><div class="grid">{''.join(cards)}</div></section>'''
-    page('index.html', 'الرئيسية', content)
+    page('index.html', 'الرئيسية', content + (ROOT / 'templates/course-hub.html').read_text())
     print(f'Built {len(list(OUT.rglob("*.html")))} pages in {OUT}')
 
 
