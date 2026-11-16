@@ -2,7 +2,19 @@
   "slug": "thinking-technology",
   "title": "نفكّر بالتكنولوجيا",
   "lessons": [
-    {"slug": "world-of-wheels", "title": "عالم من عجلات", "icon": "wheel"},
-    {"slug": "electronics-at-home", "title": "إلكترونيات في بيتي", "icon": "circuit"}
+    {
+      "slug": "world-of-wheels",
+      "title": "عالم من عجلات",
+      "icon": "wheel",
+      "audio": {
+        "intro": null,
+        "explanation": null
+      }
+    },
+    {
+      "slug": "electronics-at-home",
+      "title": "إلكترونيات في بيتي",
+      "icon": "circuit"
+    }
   ]
 }

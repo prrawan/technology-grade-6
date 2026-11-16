@@ -27,7 +27,7 @@ def page(path, title, content):
     target = OUT / path
     target.parent.mkdir(parents=True, exist_ok=True)
     depth = len(Path(path).parts) - 1
-    target.write_text(LAYOUT.substitute(title=escape('رحلة التكنولوجيا | الصف السادس الأساسي' if title == 'الرئيسية' else title), root='../' * depth, content=content, experiment_version=hashlib.sha256((ROOT / 'assets/experiment.js').read_bytes()).hexdigest()[:12], extra_styles='<link rel="stylesheet" href="assets/homepage.css">' if path == 'index.html' else '<link rel="stylesheet" href="../../assets/unit-experiment.css"><link rel="stylesheet" href="../../assets/unit-one.css">' if path == 'units/thinking-technology/index.html' else '<link rel="stylesheet" href="../../assets/unit-experiment.css"><link rel="stylesheet" href="../../assets/wheels.css"><script type="module" src="../../assets/wheels.js?v=' + hashlib.sha256((ROOT / 'assets/wheels.js').read_bytes()).hexdigest()[:12] + '"></script>' if path == 'units/thinking-technology/world-of-wheels.html' else ''))
+    target.write_text(LAYOUT.substitute(title=escape('رحلة التكنولوجيا | الصف السادس الأساسي' if title == 'الرئيسية' else title), root='../' * depth, content=content, experiment_version=hashlib.sha256((ROOT / 'assets/experiment.js').read_bytes()).hexdigest()[:12], extra_styles='<link rel="stylesheet" href="assets/homepage.css">' if path == 'index.html' else '<link rel="stylesheet" href="../../assets/unit-experiment.css"><link rel="stylesheet" href="../../assets/unit-one.css">' if path == 'units/thinking-technology/index.html' else '<link rel="stylesheet" href="../../assets/unit-experiment.css"><link rel="stylesheet" href="../../assets/wheels.css?v=' + hashlib.sha256((ROOT / 'assets/wheels.css').read_bytes()).hexdigest()[:12] + '"><script type="module" src="../../assets/wheels.js?v=' + hashlib.sha256((ROOT / 'assets/wheels.js').read_bytes()).hexdigest()[:12] + '"></script>' if path == 'units/thinking-technology/world-of-wheels.html' else ''))
 
 
 def card(title, label, symbol, href=None, description=None):
@@ -53,6 +53,19 @@ def unit_experiment():
     end = source.index('</h1>', start) + 5
     source = source[:start] + '<h2 id="pulley-title">جرّب البَكرة مع لين ويزن</h2>' + source[end:]
     return source.replace('aria-labelledby="site-title"', 'id="pulley-experiment" aria-labelledby="pulley-title"').replace('assets/', '../../assets/').replace('href="units/thinking-technology/world-of-wheels.html"', 'href="world-of-wheels.html"').replace('href="#book-map"', 'href="../../index.html#book-map"')
+
+
+def lesson_audio(lesson, kind, label):
+    audio_id = f'lesson-audio-{kind}'
+    source = lesson.get('audio', {}).get(kind)
+    if source:
+        audio_path = Path(source)
+        if audio_path.is_absolute() or '..' in audio_path.parts or not (ROOT / audio_path).is_file():
+            raise ValueError(f'Missing or invalid lesson audio file: {source}')
+    src = f' src="../../{escape(source, quote=True)}"' if source else ''
+    disabled = '' if source else ' disabled'
+    note = 'اضغط للاستماع.' if source else 'الصوت قريبًا'
+    return f'<div class="lesson-audio-control"><button type="button" class="lesson-audio-button" data-audio="{audio_id}" data-label="{label}"{disabled}><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 14v-3a8 8 0 0 1 16 0v3M4 12H2v7h4v-7zm16 0h2v7h-4v-7z"/></svg><span>{label}</span></button><small class="audio-note">{note}</small><audio id="{audio_id}" preload="none"{src}></audio></div>'
 
 
 def characters(scene):
@@ -87,7 +100,7 @@ def build():
                     for identity in ids:
                         scene = scene.replace(f'id="{identity}"', f'id="hero-{identity}"').replace(f'url(#{identity})', f'url(#hero-{identity})')
                     activity = unit_experiment().replace('href="world-of-wheels.html"', 'href="#apply"').replace('تابع درس عالم من عجلات', 'تابع إلى طبّق')
-                    content = (ROOT / 'templates/world-of-wheels.html').read_text().replace('$scene', scene).replace('$experiment', activity)
+                    content = (ROOT / 'templates/world-of-wheels.html').read_text().replace('$scene', scene).replace('$experiment', activity).replace('$intro_audio', lesson_audio(lesson, 'intro', 'استمع إلى مقدّمة الدرس')).replace('$explanation_audio', lesson_audio(lesson, 'explanation', 'استمع إلى الشرح'))
                 page(f'{unit_path}/{lesson["slug"]}.html', lesson['title'], content)
             content = f'''<nav class="breadcrumb" aria-label="مسار الصفحة"><a href="../../index.html#book-map">خريطة الكتاب</a><span aria-hidden="true">/</span><span aria-current="page">{escape(unit['title'])}</span></nav><section class="unit-intro"><div class="page-intro"><div class="eyebrow">الوحدة {number:02}</div><h1>{escape(unit['title'])}</h1><p class="intro">خطوتك الأولى في رحلة التكنولوجيا. اختر درسًا لتفتح صفحته التمهيدية.</p></div></section><section aria-labelledby="lessons-title"><div class="section-heading"><h2 id="lessons-title">دروس الوحدة</h2><p>درسان، وبداية جديدة للاكتشاف</p></div><div class="grid lessons">{''.join(lesson_cards)}</div></section><p style="margin-top:28px"><a class="back-link" href="../../index.html#book-map">← العودة إلى خريطة الكتاب</a></p>'''
             page(f'{unit_path}/index.html', unit['title'], (ROOT / 'templates/unit-one.html').read_text() if number == 1 else content)
