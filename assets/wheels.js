@@ -1,4 +1,4 @@
-import { awardProgressStar, hasProgressStar } from './progress.js?v=1';
+import { awardProgressStar, hasProgressStar } from './progress.js?v=2';
 import { bindLessonAudio, stopLessonAudio } from './lesson-audio.js?v=2';
 bindLessonAudio();
 const descriptions = {

@@ -2,6 +2,7 @@
 const keys = {
   pulley: 'technology-grade-6:pulley-completed:v1',
   wheels: 'technology-grade-6:world-of-wheels-completed:v1',
+  electronics: 'technology-grade-6:electronics-at-home-completed:v1',
 };
 const sessionAwards = new Set();
 export function hasProgressStar(activity) {
