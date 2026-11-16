@@ -106,3 +106,8 @@
 
 /* Shadows do not alter the animated SVG coordinates or transforms. */
 #load { filter:drop-shadow(1px 3px 2px #18273d25); }
+
+.site-header .nav-link .brand-icon { --brand-icon-size:32px; }
+.brand-mark img { display:block; width:44px; height:44px; max-width:none; }
+.audio-icon { flex:none; object-fit:contain; filter:drop-shadow(0 2px 1px #18273d22); }
+.stars > span { text-shadow:0 1px 0 #fff1b2,1px 2px 0 #9c6826,0 3px 3px #18273d22; }

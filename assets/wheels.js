@@ -30,7 +30,7 @@ const picture = document.querySelector('#system-picture');
 const systemRoot = new URL('.', picture.src);
 document.querySelectorAll('[data-system]').forEach(button => button.addEventListener('click', () => {
   document.querySelectorAll('[data-system]').forEach(other => other.setAttribute('aria-pressed', String(other === button)));
-  picture.src = new URL(`${button.dataset.system}-system.svg`, systemRoot);
+  picture.src = new URL(`${button.dataset.system}-system.svg?v=3d-materials-1`, systemRoot);
   picture.alt = systemNames[button.dataset.system];
   document.querySelector('#system-description').textContent = systemDescriptions[button.dataset.system];
 }));
