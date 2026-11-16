@@ -88,3 +88,8 @@ body:has(.experiment) main.wrap { width:calc(100% - 40px); max-width:1440px; }
 #pulley-experiment { border-top:1px solid var(--line); margin-top:28px; padding-top:28px; scroll-margin-top:20px; }
 /* Lin is a single native SVG image, sharing Yazan's y=400 shoe baseline. */
 #pulley-experiment .scene-lin { position:static; width:190px; height:356px; transform:none; }
+/* Physical SVG coordinates keep Lin at the visual left, independent of RTL.
+   The parent reflection turns her gaze toward the pulley, not her position. */
+#pulley-experiment .lin-anchor { direction:ltr; }
+#pulley-experiment .scene-lin { x:36px; y:44px; }
+#pulley-experiment .scene-lin[href$="lin-point-scene.png"] { x:10.26px; }
