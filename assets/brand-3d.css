@@ -1,4 +1,4 @@
-/* Phase one: loaded ONLY by home and unit one. All icons share one 3D atlas. */
+/* Shared visual layer for all pages. All icons share one 3D atlas. */
 .brand-icon { display:inline-block; width:var(--brand-icon-size,72px); height:auto; aspect-ratio:1263/1246; background-image:url('./brand-3d/icons.png'); background-repeat:no-repeat; background-size:300% 300%; vertical-align:middle; flex:none; pointer-events:none; user-select:none; filter:drop-shadow(0 4px 3px #18273d12); }
 .brand-icon-gear { background-position:0% 0%; }
 .brand-icon-book { background-position:50% 0%; }
@@ -78,3 +78,31 @@
 .site-header .nav-link:active { transform:translateY(2px) scale(.985); box-shadow:0 1px 0 #111f2e20; }
 @media(hover:hover) { .button[href]:active,button.button:not(:disabled):active { transform:translateY(2px) scale(.985); } }
 @media(prefers-reduced-motion:reduce) { .site-header .nav-link { transition:none; } .site-header .nav-link:active { transform:none; } }
+
+/* Lesson and course surfaces: visual styling only; diagram geometry stays intact. */
+.lesson-hero h1,.course-hub h1,.certificate-sheet h2 { color:#18273D; text-shadow:0 1px 0 #fff,1px 2px 0 #a5beb6,0 4px 4px #18273d16; }
+.lesson-hero,.course-hub { border:1px solid #fff9; border-radius:30px; background:linear-gradient(145deg,#fffdf7,#e0f0e5); box-shadow:inset 0 2px 0 #fff9,0 5px 0 #c5d3c22e,0 12px 25px #18273d0d; }
+.course-hub { padding:clamp(18px,3vw,36px); }
+.course-hub h1 { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+.course-hub h1 .brand-icon { --brand-icon-size:76px; }
+.lesson-hero { overflow:hidden; }
+.lesson-hero > div { padding:16px; }
+.lesson-tabs a { display:flex; align-items:center; justify-content:center; gap:10px; }
+.lesson-tabs .brand-icon { --brand-icon-size:48px; }
+.learning-section > h2 { display:flex; align-items:center; gap:12px; }
+.learning-section > h2 .brand-icon { --brand-icon-size:44px; }
+.learning-section,.lesson-result,.stat-tile,.course-unit-tile,.classification-card,.matching-card,.resistance-panel,.sensor-experiment { box-shadow:inset 0 2px 0 #ffffff80,0 4px 0 #b5ccbe26,0 9px 18px #18273d0b; }
+.section-content { background:linear-gradient(135deg,#fffdf8,#f7f3e8); }
+.touch-pulley,.bike-diagram,.led-display svg,.sensor-diagram,.system-comparison svg,.classification-card svg { filter:drop-shadow(0 3px 2px #18273d25); }
+.led-light-core,.part-wheel,.axle-ink,.rear-wheel { filter:drop-shadow(1px 2px 1px #18273d30); }
+.device-choices button,.component-cards button,.part-buttons button,.system-tabs button,.lesson-tabs a,.classification-check,.match-check,.force-check,.answer-retry,.retry-button,.classification-retry,.match-retry,.force-retry,.certificate-close { box-shadow:inset 0 2px 0 #ffffff80,0 3px 0 #126c7020,0 5px 8px #18273d0b; transition:box-shadow 140ms ease,filter 140ms ease; }
+.device-choices button:active,.component-cards button:active,.part-buttons button:active,.system-tabs button:active,.lesson-tabs a:active,.classification-check:active,.match-check:active,.force-check:active,.retry-button:active,.answer-retry:active,.classification-retry:active,.match-retry:active,.force-retry:active,.certificate-close:active { box-shadow:inset 0 2px 4px #18273d22,0 1px 0 #126c7020; filter:brightness(.96); }
+.course-unit-tile button:disabled { cursor:not-allowed; box-shadow:none; }
+.certificate-sheet { background:linear-gradient(135deg,#fffdf5,#f7f3e8); box-shadow:inset 0 2px 0 white,0 8px 20px #18273d15; }
+.certificate-seal .brand-icon { --brand-icon-size:92px; }
+@media(max-width:600px) { .lesson-tabs { gap:0; } .lesson-tabs a { gap:5px; } .lesson-tabs .brand-icon { --brand-icon-size:34px; } .course-hub h1 .brand-icon { --brand-icon-size:58px; } }
+@media(prefers-reduced-motion:reduce) { .device-choices button,.component-cards button,.part-buttons button,.system-tabs button,.lesson-tabs a,.classification-check,.match-check,.force-check,.answer-retry,.retry-button,.classification-retry,.match-retry,.force-retry,.certificate-close { transition:none; } }
+@media print { .certificate-sheet { background:white; box-shadow:none; } .certificate-sheet h2 { text-shadow:none; } .certificate-seal .brand-icon { width:15mm; } }
+
+/* Shadows do not alter the animated SVG coordinates or transforms. */
+#load { filter:drop-shadow(1px 3px 2px #18273d25); }
