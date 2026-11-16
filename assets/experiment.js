@@ -32,7 +32,15 @@ function awardStar() {
 const scene = document.querySelector('.pulley-scene');
 if (scene) {
   document.querySelector('#try-pulley').addEventListener('click', () => document.querySelector('#prediction').focus({ preventScroll: true }));
-  const characterRoot = new URL('.', scene.querySelector('.scene-lin').src).href;
+  const lin = scene.querySelector('.scene-lin');
+  const characterRoot = new URL('.', new URL(lin.getAttribute('href'), document.baseURI)).href;
+  function setLinPose(pointing) {
+    // Native SVG image: one figure, fixed shoe baseline, pose-specific horizontal anchor.
+    lin.setAttribute('href', `${characterRoot}lin-${pointing ? 'point' : 'welcome'}-scene.png`);
+    lin.setAttribute('x', pointing ? '10.26' : '36');
+    lin.setAttribute('aria-label', pointing ? 'لين تشير إلى الصندوق المرتفع' : 'لين تراقب الصندوق');
+  }
+  setLinPose(false);
   const pull = document.querySelector('#pull');
   const reset = document.querySelector('#reset');
   const choices = [...document.querySelectorAll('[name="prediction"]')];
@@ -83,8 +91,7 @@ if (scene) {
     choices.forEach(choice => choice.disabled = true);
     const finish = () => {
       render(1);
-      scene.querySelector('.scene-lin').src = `${characterRoot}lin-point-scene.png`;
-      scene.querySelector('.scene-lin').alt = 'لين تشير إلى الصندوق المرتفع';
+      setLinPose(true);
       feedback.innerHTML = `توقّعك: <strong>${prediction === 'up' ? 'إلى أعلى' : 'إلى أسفل'}</strong>. النتيجة: <strong>ارتفع الصندوق</strong>. ${prediction === 'up' ? 'أحسنت! وافقت النتيجة توقّعك.' : 'توقّعت نزول الصندوق؛ لاحظ أنه ارتفع.'} <strong>البَكَرَة الثابتة تغيّر اتجاه السحب</strong>: نسحب إلى أسفل، فترتفع <strong>الحَمولة</strong> إلى أعلى.`;
       actions.hidden = false;
       awardStar();
@@ -106,8 +113,7 @@ if (scene) {
     actions.hidden = true;
     document.querySelector('#star-message').textContent = '';
     pull.disabled = true;
-    scene.querySelector('.scene-lin').src = `${characterRoot}lin-welcome-scene.png`;
-    scene.querySelector('.scene-lin').alt = 'لين تراقب الصندوق';
+    setLinPose(false);
     summary.textContent = 'اختر توقّعك لتبدأ.';
     feedback.textContent = 'اختر توقّعك أولًا لتفعيل السحب.';
     choices[0].focus();
