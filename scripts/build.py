@@ -45,6 +45,8 @@ def page(path, title, content):
         serialized = json.dumps(COURSE_CATALOG, ensure_ascii=False).replace('<', '\\u003c')
         extra.append(f'<script type="application/json" id="course-catalog" data-root="{prefix}">{serialized}</script>')
         content += (ROOT / 'templates/certificate-dialog.html').read_text()
+    if path in ('index.html', 'units/thinking-technology/index.html'):
+        styles.append('brand-3d.css')
     for name in styles:
         digest = hashlib.sha256((ROOT / 'assets' / name).read_bytes()).hexdigest()[:12]
         extra.append(f'<link rel="stylesheet" href="{prefix}assets/{name}?v={digest}">')
@@ -54,8 +56,15 @@ def page(path, title, content):
     target.write_text(LAYOUT.substitute(title=escape('رحلة التكنولوجيا | الصف السادس الأساسي' if title == 'الرئيسية' else title), root=prefix, content=content, experiment_version=hashlib.sha256((ROOT / 'assets/experiment.js').read_bytes()).hexdigest()[:12], extra_styles='\n'.join(extra)))
 
 
+def brand_icon(name):
+    return f'<span class="brand-icon brand-icon-{name}" aria-hidden="true"></span>'
+
+
 def certificate_card(unit_id):
-    return (ROOT / 'templates/certificate-card.html').read_text().replace('$unit_id', unit_id)
+    content = (ROOT / 'templates/certificate-card.html').read_text().replace('$unit_id', unit_id)
+    if unit_id == 'thinking-technology':
+        content = re.sub(r'<svg.*?</svg>', brand_icon('certificate'), content, flags=re.S)
+    return content
 
 
 def card(title, label, symbol, href=None, description=None):
@@ -68,12 +77,13 @@ def card(title, label, symbol, href=None, description=None):
 
 
 def station(entry, number, href):
-    book_icon = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4q5-3 10 0 5-3 10 0v16q-5-3-10 0-5-3-10 0zM12 4v16"/></svg>'
-    trophy = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h10v6c0 8-10 8-10 0zM7 5H3v4q0 5 6 5m8-9h4v4q0 5-6 5M12 17v4m-5 1h10"/></svg>'
+    book_icon = brand_icon('book')
+    trophy = brand_icon('trophy')
     lessons = f'<a class="station-start unit-map-option" href="{href}">{book_icon}<span>الدروس</span></a>' if href else f'<button class="unit-map-option" disabled>{book_icon}<span>الدروس <small>قريبًا</small></span></button>'
     challenge = f'<a class="unit-map-option" href="{escape(entry["challenge_url"])}">{trophy}<span>تحدّي الوحدة</span></a>' if entry.get('challenge_url') else f'<button class="unit-map-option" disabled>{trophy}<span>تحدّي الوحدة <small>قريبًا</small></span></button>'
+    heading_icon = brand_icon({'wheel': 'gear', 'signal': 'signal', 'medical': 'medical'}[entry['icon']])
     status = '' if href else '<span class="badge">قيد الإعداد</span>'
-    return f'<article class="unit-map-card{' featured' if href else ''}"><div class="unit-map-heading">{icon(entry["icon"])}<h3>{escape(entry["title"])}</h3>{status}</div><div class="unit-map-actions">{lessons}{challenge}</div></article>'
+    return f'<article class="unit-map-card{' featured' if href else ''}"><div class="unit-map-heading">{heading_icon}<h3>{escape(entry["title"])}</h3>{status}</div><div class="unit-map-actions">{lessons}{challenge}</div></article>'
 
 
 def unit_experiment():
