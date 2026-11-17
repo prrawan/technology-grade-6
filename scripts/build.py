@@ -32,6 +32,8 @@ def page(path, title, content):
     styles, modules = [], []
     if path == 'index.html':
         styles = ['homepage.css']
+    elif path == 'portfolio.html':
+        styles = ['portfolio.css']
     elif path == 'units/thinking-technology/index.html':
         styles = ['unit-experiment.css', 'unit-one.css']
     elif path == 'units/thinking-technology/world-of-wheels.html':

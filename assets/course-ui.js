@@ -1,4 +1,4 @@
-import { unitProgress, readCertificate, saveCertificate, starItems } from './course-state.js?v=2';
+import { unitProgress, readCertificate, saveCertificate, starItems } from './course-state.js?v=3';
 const catalogNode = document.querySelector('#course-catalog');
 const units = JSON.parse(catalogNode.textContent);
 const siteRoot = new URL(catalogNode.dataset.root || './', document.baseURI);
@@ -62,31 +62,69 @@ function renderCertificateCards() {
     host.append(form);
   });
 }
+// Decorative art shares the site's atlas and SVG materials; saved records stay untouched.
+function portfolioIcon(name) {
+  const node = element('span', undefined, `brand-icon brand-icon-${name}`);
+  node.setAttribute('aria-hidden', 'true'); return node;
+}
+function portfolioImage(path, className = 'portfolio-art') {
+  const image = document.createElement('img'); image.src = url(`assets/${path}?v=portfolio-1`); image.alt = ''; image.className = className; image.width = 110; image.height = 110; return image;
+}
+function portfolioHeading(text, icon) {
+  const heading = element('h2', undefined, 'portfolio-section-title');
+  const pill = element('span'); pill.append(portfolioIcon(icon), document.createTextNode(text)); heading.append(pill); return heading;
+}
 function renderPortfolio() {
   const host = document.querySelector('#portfolio-content'); if (!host) return;
   host.replaceChildren();
   const stars = starItems();
+  const earned = stars.filter(item => item.earned);
   const completed = units.filter(unit => unitProgress(unit).complete);
   const certificates = units.map(unit => ({ unit, record: readCertificate(unit) })).filter(item => item.record);
-  const stats = element('div', undefined, 'portfolio-stats');
-  for (const [id, number, label] of [['portfolio-stars', stars.filter(item => item.earned).length, 'نجومي'], ['portfolio-units', completed.length, 'الوحدات المكتملة'], ['portfolio-certificates', certificates.length, 'الشهادات المكتسبة']]) {
-    const tile = element('div', undefined, 'stat-tile'); const count = element('strong', String(number)); count.id = id; tile.append(count, element('span', label)); stats.append(tile);
+  const stats = element('div', undefined, 'portfolio-stats'); stats.setAttribute('aria-label', 'ملخّص الإنجاز');
+  for (const [id, number, label, icon] of [['portfolio-stars', earned.length, 'نجومي', 'star'], ['portfolio-units', completed.length, 'الوحدات المكتملة', 'book'], ['portfolio-certificates', certificates.length, 'شهاداتي', 'certificate']]) {
+    const tile = element('div', undefined, 'stat-tile');
+    const art = icon === 'star' ? portfolioImage('brand-3d/star.svg') : portfolioIcon(icon);
+    const copy = element('div', undefined, 'stat-copy'), count = element('strong', String(number)); count.id = id;
+    copy.append(element('span', label), count); tile.append(art, copy); stats.append(tile);
   }
-  host.append(stats, element('h2', 'نجوم رحلتي'));
-  const starList = element('ul', undefined, 'progress-list'); stars.forEach(item => starList.append(element('li', `${item.earned ? '★' : '☆'} ${item.title} — ${item.earned ? 'حصلت عليها' : 'لم تكتمل بعد'}`))); host.append(starList);
-  host.append(element('h2', 'الوحدات'));
-  const unitList = element('div', undefined, 'course-unit-list');
-  units.forEach(unit => {
-    const progress = unitProgress(unit); const tile = element('article', undefined, 'course-unit-tile');
-    tile.append(element('h3', unit.title), element('p', progress.complete ? '✓ وحدة مكتملة' : unit.lessons.length ? `الدروس المكتملة: ${progress.completedLessons} من ${unit.lessons.length} — ${progress.challengeComplete ? 'التحدّي مكتمل' : unit.challenge.href ? 'التحدّي لم يكتمل بعد' : 'التحدّي قريبًا'}` : 'قيد الإعداد'), link(progress.complete ? 'عرض شهادة الوحدة' : 'صفحة الوحدة', unit.href + '#unit-certificate'));
-    unitList.append(tile);
+  host.append(stats, portfolioHeading('نجوم رحلتي', 'trophy'));
+  const starList = element('ul', undefined, 'progress-list portfolio-star-grid');
+  const artNames = { pulley:'pulley', wheels:'book', electronics:'led', thinkingChallenge:'trophy' };
+  earned.forEach(item => {
+    const tile = element('li', undefined, 'portfolio-star-card'); tile.dataset.achievement = item.id;
+    const copy = element('div', undefined, 'achievement-copy'); copy.append(element('h3', item.title));
+    const badge = element('div', undefined, 'earned-badge'); badge.append(portfolioImage('brand-3d/star.svg'), element('span', 'حصلت عليها'));
+    const art = item.id === 'electronics' ? portfolioImage('electronics/led.svg') : portfolioIcon(artNames[item.id]);
+    tile.append(art, copy, badge); starList.append(tile);
   });
-  host.append(unitList, element('h2', 'شهاداتي'));
-  if (!certificates.length) host.append(element('p', 'ستظهر شهاداتك هنا بعد إكمال دروس الوحدة وتحدّيها وكتابة اسمك.'));
+  if (earned.length) host.append(starList);
+  else { const empty = element('div', undefined, 'portfolio-empty'); empty.append(element('p', 'لم تحصل على نجوم بعد. ابدأ الوحدة الأولى لتجرب وتتعلّم وتجمع نجومك.'), link('ابدأ الوحدة الأولى', units[0].href, 'button')); host.append(empty); }
+  host.append(portfolioHeading('الوحدات', 'book'));
+  const unitList = element('div', undefined, 'course-unit-list portfolio-units');
+  units.forEach((unit, index) => {
+    const progress = unitProgress(unit), ready = unit.lessons.length > 0;
+    const count = stars.filter(star => star.unitId === unit.id && star.earned).length;
+    const tile = element('article', undefined, 'course-unit-tile' + (progress.complete ? ' is-complete' : ''));
+    tile.dataset.unit = unit.id;
+    const copy = element('div', undefined, 'portfolio-unit-copy'); copy.append(element('h3', unit.title));
+    const status = element('p', !ready ? 'قيد الإعداد' : progress.complete ? '✓ مكتملة' : count > 0 ? 'قيد التعلّم' : 'لم تبدأ بعد', 'unit-status'); copy.append(status);
+    if (ready) {
+      copy.append(element('p', `${count} نجوم مكتسبة`, 'unit-star-count'));
+      if (!progress.complete) copy.append(element('p', `الدروس المكتملة: ${progress.completedLessons} من ${unit.lessons.length} — ${progress.challengeComplete ? 'التحدّي مكتمل' : 'التحدّي لم يكتمل بعد'}`, 'portfolio-unit-detail'));
+      copy.append(link(progress.complete ? 'صفحة الوحدة والشهادة' : 'تابع الوحدة', unit.href + (progress.complete ? '#unit-certificate' : ''), 'portfolio-unit-link'));
+    }
+    tile.append(portfolioIcon(['gear', 'signal', 'medical'][index]), copy); unitList.append(tile);
+  });
+  host.append(unitList, portfolioHeading('شهاداتي', 'certificate'));
+  if (!certificates.length) host.append(element('p', 'ستظهر شهاداتك هنا بعد إكمال دروس الوحدة وتحدّيها وكتابة اسمك.', 'portfolio-empty'));
   else {
     const list = element('div', undefined, 'earned-certificates');
-    certificates.forEach(({ unit, record }) => { const tile = element('article', undefined, 'course-unit-tile'); tile.append(element('h3', unit.title), element('p', record.name), button('عرض الشهادة', () => showCertificate(unit, record))); list.append(tile); });
-    host.append(list);
+    certificates.forEach(({ unit, record }) => {
+      const tile = element('article', undefined, 'course-unit-tile portfolio-certificate');
+      const copy = element('div'); copy.append(element('h3', `شهادة إنجاز وحدة ${unit.title}`), element('p', record.name));
+      tile.append(portfolioIcon('certificate'), copy, button('اعرض الشهادة', () => showCertificate(unit, record))); list.append(tile);
+    }); host.append(list);
   }
 }
 function renderChallenges() {
