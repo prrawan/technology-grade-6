@@ -1,0 +1,46 @@
+/* All about-page copy remains native HTML, separate from workshop illustrations. */
+body:has(.about-page) .site-header { width:100%; min-height:90px; padding:14px max(24px,calc((100vw - 1240px)/2)); background:linear-gradient(120deg,#1b384c,#18273D); color:#fffdf7; border:0; }
+body:has(.about-page) .brand { color:inherit; }
+body:has(.about-page) .stars,body:has(.about-page) .nav-link { background:#fff8e8; color:#18273D; border-radius:28px; padding:8px 16px; }
+body:has(.about-page) main.wrap { max-width:1240px; width:calc(100% - 40px); }
+.course-hub.about-page { max-width:none; padding:0; border:0; background:transparent; box-shadow:none; text-align:right; }
+.about-hero { display:grid; grid-template-columns:1.05fr 1fr; direction:ltr; align-items:stretch; margin-top:10px; border:2px solid #fffdf7; border-radius:32px; overflow:hidden; background:linear-gradient(135deg,#ecf8e9,#cbe9db); box-shadow:0 8px 24px #18273d0d; }
+.about-hero > img { width:100%; height:100%; min-height:370px; object-fit:cover; object-position:43% center; }
+.about-intro { direction:rtl; padding:26px 28px; align-self:center; }
+.about-page .about-intro h1 { display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:nowrap; font-size:clamp(36px,4.8vw,58px); margin:0 0 20px; }
+.about-intro h1 .brand-icon { --brand-icon-size:65px; }
+.about-intro p { font-size:clamp(19px,2.1vw,25px); line-height:2; margin:0; }
+.about-page .about-section-title { display:flex; align-items:center; justify-content:center; gap:24px; font-size:clamp(30px,4vw,45px); margin:34px 0 22px; }
+.about-section-title::before,.about-section-title::after { content:''; flex:1; height:2px; background:#D6A248; }
+.about-achievements { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; }
+.about-card { padding:18px 22px 24px; border:1px solid white; border-bottom:3px solid #e1dacb; border-radius:30px; background:linear-gradient(140deg,#fffdf8,#f6f0e4); text-align:center; box-shadow:inset 0 2px 0 #fff,0 10px 20px #18273d0d; }
+.about-card > .brand-icon { --brand-icon-size:165px; }
+.about-card h3 { font-size:28px; color:#fffdf7; background:linear-gradient(145deg,#148780,#07525d); border-radius:25px; margin:10px 0 14px; padding:3px 8px; box-shadow:inset 0 2px 0 #fff4; }
+.about-card p { font-size:21px; line-height:1.9; margin:0; }
+.about-experiment-art { position:relative; width:190px; height:163px; margin:auto; max-width:100%; direction:ltr; }
+.about-experiment-art > .brand-icon { --brand-icon-size:165px; position:absolute; left:0; }
+.about-experiment-art > img { position:absolute; right:-12px; bottom:0; width:105px; height:105px; object-fit:contain; }
+.about-identity { display:grid; grid-template-columns:.85fr 1fr 1.2fr; align-items:center; gap:22px; padding:24px; background:linear-gradient(145deg,#fffdf8,#f7f0e4); border:1px solid white; border-radius:30px; box-shadow:0 8px 20px #18273d0d; }
+.about-logo { text-align:center; }
+.about-logo img { display:block; width:120px; height:120px; margin:0 auto 12px; }
+.about-logo h3 { font-size:26px; margin:0; line-height:1.7; }
+.about-logo p { font-size:17px; margin:0; }
+.about-guides { margin:0; padding-inline:18px; border-inline:1px solid #d9b365; text-align:center; }
+.about-guides img { display:block; width:100%; height:180px; object-fit:cover; object-position:center 40%; border-radius:24px; }
+.about-guides figcaption { font-size:16px; line-height:1.9; margin-top:10px; }
+.about-palette { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; text-align:center; }
+.about-palette li { display:flex; flex-direction:column; align-items:center; gap:4px; min-width:0; font-size:14px; line-height:1.7; }
+.about-palette strong { font-size:18px; }
+.about-palette bdi { font-size:11px; color:#52636d; }
+.color-swatch { width:100%; height:75px; border-radius:18px; border:1px solid #fff8; box-shadow:inset 0 2px 2px #fff4,0 3px 4px #18273d17; }
+.color-swatch.navy { background:#18273D; }.color-swatch.teal { background:#126C70; }.color-swatch.cream { background:#F7F3E8; border-color:#e0d7c4; }.color-swatch.gold { background:#D6A248; }
+.about-standards { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:18px; }
+.about-standard { padding:20px 18px; border:1px solid #fffdf7; border-radius:27px; background:linear-gradient(145deg,#f4f8ed,#e3efdf); box-shadow:inset 0 2px 0 #fff,0 5px 12px #18273d0c; text-align:center; }
+.about-standard > .brand-icon { --brand-icon-size:64px; }
+.about-standard > img,.about-standard > svg { width:64px; height:64px; object-fit:contain; }
+.about-text-icon { display:block; height:64px; font:bold 45px Georgia,serif; color:#D6A248; text-shadow:0 1px 0 #fff2b0,1px 3px 0 #93682d; }
+.about-standard h3 { font-size:22px; margin:10px 0; }
+.about-standard p { font-size:18px; line-height:1.9; margin:0; }
+.about-page > .about-home { display:table; margin:30px auto 0; min-height:52px; padding:10px 26px; font-size:23px; }
+@media(max-width:1000px) { .about-intro { padding:22px; } .about-page .about-intro h1 { gap:10px; } .about-intro h1 .brand-icon { --brand-icon-size:50px; } .about-card { padding:16px 14px 20px; } .about-card h3 { font-size:24px; } .about-card p { font-size:19px; } .about-card > .brand-icon { --brand-icon-size:140px; } .about-experiment-art { height:139px; width:160px; } .about-experiment-art > .brand-icon { --brand-icon-size:140px; } .about-identity { grid-template-columns:1fr 1.2fr; gap:20px; } .about-palette { grid-column:1/-1; max-width:520px; width:100%; justify-self:center; } .about-guides { border-inline-end:0; } .about-standards { grid-template-columns:1fr 1fr; } }
+@media(max-width:600px) { body:has(.about-page) .site-header { flex-wrap:wrap; padding:12px 16px; gap:10px; } body:has(.about-page) .brand { width:100%; font-size:23px; } body:has(.about-page) .brand small { display:none; } body:has(.about-page) main.wrap { width:calc(100% - 24px); } .about-hero { grid-template-columns:1fr; } .about-hero > img { height:230px; min-height:0; object-position:center 40%; } .about-intro { padding:22px 20px; } .about-page .about-intro h1 { font-size:38px; } .about-intro p { font-size:20px; } .about-page .about-section-title { font-size:30px; gap:12px; margin-top:30px; } .about-achievements { grid-template-columns:1fr; gap:16px; } .about-card { padding:16px 24px 22px; } .about-card h3 { font-size:28px; } .about-card p { font-size:21px; } .about-card > .brand-icon { --brand-icon-size:150px; } .about-experiment-art { height:148px; width:175px; } .about-experiment-art > .brand-icon { --brand-icon-size:150px; } .about-identity { grid-template-columns:1fr; padding:22px 18px; } .about-guides { padding:18px 0; border:0; border-block:1px solid #d9b365; } .about-guides img { height:210px; } .about-palette { grid-column:auto; gap:8px; } .color-swatch { height:70px; } .about-palette strong { font-size:18px; } .about-palette li { font-size:13px; } .about-standards { grid-template-columns:1fr; gap:14px; } .about-standard { padding:20px 24px; } .about-standard h3 { font-size:24px; } .about-standard p { font-size:20px; } }
