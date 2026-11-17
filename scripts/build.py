@@ -39,7 +39,7 @@ def page(path, title, content):
     elif path == 'portfolio.html':
         styles = ['portfolio.css']
     elif path == 'units/thinking-technology/index.html':
-        styles = ['unit-experiment.css', 'unit-one.css']
+        styles, modules = ['unit-experiment.css', 'unit-one.css'], ['unit-intro-audio.js']
     elif path == 'units/thinking-technology/world-of-wheels.html':
         styles, modules = ['unit-experiment.css', 'wheels.css'], ['wheels.js']
     elif path == 'units/thinking-technology/electronics-at-home.html':
