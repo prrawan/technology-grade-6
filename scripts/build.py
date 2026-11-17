@@ -31,7 +31,7 @@ def page(path, title, content):
     prefix = '../' * (len(Path(path).parts) - 1)
     styles, modules = [], []
     if path == 'index.html':
-        styles = ['homepage.css']
+        styles, modules = ['homepage.css'], ['home-audio.js']
     elif path == 'about.html':
         styles = ['about.css']
     elif path == 'challenges.html':
