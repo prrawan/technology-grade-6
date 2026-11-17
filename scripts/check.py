@@ -44,7 +44,7 @@ class Document(HTMLParser):
 
 
 docs = {p.resolve(): Document(p) for p in ROOT.rglob('*.html')}
-assert len(docs) == 9, 'Expected home, three units, two lessons, and three hub pages'
+assert len(docs) == 10, 'Expected home, three units, two lessons, and three hub pages, and the first unit challenge'
 for path, doc in docs.items():
     assert doc.language == ('ar', 'rtl'), path
     assert doc.headings, path

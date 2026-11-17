@@ -38,7 +38,9 @@ def page(path, title, content):
         styles, modules = ['unit-experiment.css', 'wheels.css'], ['wheels.js']
     elif path == 'units/thinking-technology/electronics-at-home.html':
         styles, modules = ['wheels.css', 'electronics.css'], ['electronics.js']
-    course_page = path in ('index.html', 'portfolio.html', 'challenges.html', 'about.html') or path.startswith('units/') and path.endswith('/index.html')
+    elif path == 'units/thinking-technology/challenge.html':
+        styles, modules = ['wheels.css', 'unit-challenge.css'], ['unit-challenge.js']
+    course_page = path in ('index.html', 'portfolio.html', 'challenges.html', 'about.html') or path.startswith('units/') and (path.endswith('/index.html') or path.endswith('/challenge.html'))
     extra = []
     if course_page:
         styles.append('course.css')
@@ -146,7 +148,7 @@ def build():
         slug = data['slug'] if data else entry['slug']
         COURSE_CATALOG.append({
             'id': slug, 'title': entry['title'], 'href': f'units/{slug}/index.html',
-            'lessons': [{'title': lesson['title'], 'key': f'technology-grade-6:{lesson["slug"]}-completed:v1'} for lesson in data['lessons']] if data else [],
+            'lessons': [{'title': lesson['title'], 'href': f'units/{slug}/{lesson["slug"]}.html', 'key': f'technology-grade-6:{lesson["slug"]}-completed:v1'} for lesson in data['lessons']] if data else [],
             'challenge': {'href': entry.get('challenge_url'), 'key': f'technology-grade-6:{slug}-challenge-completed:v1'},
         })
     cards = []
@@ -182,6 +184,7 @@ def build():
         if not entry.get('directory'):
             placeholder = f'<section class="course-hub"><h1>{escape(entry["title"])}</h1><p>دروس هذه الوحدة قيد الإعداد.</p><a class="back-link" href="../../index.html#book-map">← العودة إلى خريطة الوحدات</a></section>'
             page(f'units/{entry["slug"]}/index.html', entry['title'], placeholder + certificate_card(entry['slug']))
+    page('units/thinking-technology/challenge.html', 'تحدّي وحدة نفكّر بالتكنولوجيا', (ROOT / 'templates/unit-challenge.html').read_text())
     for slug, title in [('portfolio', 'ملف إنجازي'), ('challenges', 'التحدّيات'), ('about', 'عن المشروع')]:
         page(f'{slug}.html', title, (ROOT / f'templates/{slug}.html').read_text())
     content = f'''{(ROOT / "templates/home.html").read_text()}<section id="book-map" aria-labelledby="map-title"><div class="section-heading"><div><div class="eyebrow">مسارك في هذا الكتاب</div><h2 id="map-title">خريطة الوحدات</h2></div><p>ثلاث وحدات مرتّبة حسب المنهج</p></div><div class="grid">{''.join(cards)}</div></section>'''

@@ -1,4 +1,4 @@
-import { hasProgressStar } from './progress.js?v=2';
+import { hasProgressStar } from './progress.js?v=3';
 export const certificateKey = unit => `technology-grade-6:certificate:${unit.id}:v1`;
 export function readFlag(key) { try { return localStorage.getItem(key) === 'true'; } catch { return false; } }
 export function unitProgress(unit) {
@@ -22,5 +22,5 @@ export function saveCertificate(unit, name) {
   return { record, saved };
 }
 export function starItems() {
-  return [{ id: 'pulley', title: 'تجربة البَكرة' }, { id: 'wheels', title: 'درس عالم من عجلات' }, { id: 'electronics', title: 'درس إلكترونيات في بيتي' }].map(item => ({ ...item, earned: hasProgressStar(item.id) }));
+  return [{ id: 'pulley', title: 'تجربة البَكرة' }, { id: 'wheels', title: 'درس عالم من عجلات' }, { id: 'electronics', title: 'درس إلكترونيات في بيتي' }, { id: 'thinkingChallenge', title: 'تحدّي وحدة نفكّر بالتكنولوجيا' }].map(item => ({ ...item, earned: hasProgressStar(item.id) }));
 }
