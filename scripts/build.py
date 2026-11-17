@@ -32,6 +32,8 @@ def page(path, title, content):
     styles, modules = [], []
     if path == 'index.html':
         styles = ['homepage.css']
+    elif path == 'challenges.html':
+        styles = ['challenges.css']
     elif path == 'portfolio.html':
         styles = ['portfolio.css']
     elif path == 'units/thinking-technology/index.html':
@@ -137,6 +139,28 @@ def characters(scene):
     return f'<div class="guides" aria-label="رفيقا الرحلة لين ويزن">{figures}</div>'
 
 
+def challenge_listing():
+    # Count the actual question objects without changing the quiz or its state.
+    source = (ROOT / 'assets/unit-challenge.js').read_text()
+    block = re.search(r'const questions = \[(.*?)\n\];', source, re.S)
+    if not block:
+        raise ValueError('Could not locate the current challenge questions')
+    count = len(re.findall(r'^\s*\{ title:', block[1], re.M))
+    if not count:
+        raise ValueError('The challenge question count must be positive')
+    number = str(count).translate(str.maketrans('0123456789', '٠١٢٣٤٥٦٧٨٩'))
+    cards = []
+    for index, unit in enumerate(COURSE_CATALOG):
+        title, href = escape(unit['title']), escape(unit['href'])
+        if unit['challenge']['href']:
+            challenge_href = escape(unit['challenge']['href'])
+            cards.append(f'<article class="challenge-featured" aria-labelledby="available-challenge-title"><div class="challenge-featured-copy"><span class="challenge-availability">⚡ متاح الآن</span><h2 id="available-challenge-title">{title}</h2><p class="challenge-question-count" data-count="{count}">▤ {number} أسئلة</p><div class="challenge-card-actions"><a class="button challenge-start" href="{challenge_href}">ابدأ التحدّي ←</a><a class="challenge-unit-link" href="{href}">صفحة الوحدة</a></div></div><div class="challenge-card-art" aria-hidden="true">{brand_icon("gear")}<img src="assets/electronics/led.svg" width="160" height="160" alt=""></div></article>')
+        else:
+            symbol = 'signal' if index == 1 else 'medical'
+            cards.append(f'<article class="challenge-upcoming"><div><h2>{title}</h2><span class="challenge-pending">قيد الإعداد</span><a class="challenge-unit-link" href="{href}">صفحة الوحدة</a></div>{brand_icon(symbol)}</article>')
+    return ''.join(cards)
+
+
 def build():
     OUT.mkdir(exist_ok=True)
     shutil.copytree(ROOT / 'assets', OUT / 'assets', dirs_exist_ok=True)
@@ -188,7 +212,10 @@ def build():
             page(f'units/{entry["slug"]}/index.html', entry['title'], placeholder + certificate_card(entry['slug']))
     page('units/thinking-technology/challenge.html', 'تحدّي وحدة نفكّر بالتكنولوجيا', (ROOT / 'templates/unit-challenge.html').read_text())
     for slug, title in [('portfolio', 'ملف إنجازي'), ('challenges', 'التحدّيات'), ('about', 'عن المشروع')]:
-        page(f'{slug}.html', title, (ROOT / f'templates/{slug}.html').read_text())
+        content = (ROOT / f'templates/{slug}.html').read_text()
+        if slug == 'challenges':
+            content = content.replace('$challenge_cards', challenge_listing())
+        page(f'{slug}.html', title, content)
     content = f'''{(ROOT / "templates/home.html").read_text()}<section id="book-map" aria-labelledby="map-title"><div class="section-heading"><div><div class="eyebrow">مسارك في هذا الكتاب</div><h2 id="map-title">خريطة الوحدات</h2></div><p>ثلاث وحدات مرتّبة حسب المنهج</p></div><div class="grid">{''.join(cards)}</div></section>'''
     page('index.html', 'الرئيسية', content + (ROOT / 'templates/course-hub.html').read_text())
     print(f'Built {len(list(OUT.rglob("*.html")))} pages in {OUT}')
