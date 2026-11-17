@@ -93,3 +93,6 @@ body:has(.workshop) main.wrap { width:calc(100% - 40px); max-width:1440px; }
 @media(prefers-reduced-motion:reduce) { .station a:active { transform:none; } }
 body:has(.workshop) .nav-link { display:flex; align-items:center; gap:8px; }
 .station-start svg { width:34px; height:34px; flex:none; }
+/* Available home-introduction audio keeps the existing secondary-button design. */
+.audio-placeholder button:not(:disabled) { color:var(--navy); opacity:1; cursor:pointer; min-height:48px; font-size:clamp(16px,1.5vw,21px); }
+.audio-placeholder button[aria-pressed="true"] { background:#d3eee2; border-color:var(--teal); }
