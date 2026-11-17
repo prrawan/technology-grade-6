@@ -8,10 +8,10 @@
       "icon": "wheel",
       "audio": {
         "intro": null,
-        "explanation": null,
-        "pulley_up": null,
-        "pulley_down": null,
-        "congratulations": null
+        "explanation": "assets/audio/wheels-explanation.wav",
+        "pulley_up": "assets/audio/wheels-pulley-comment-up.wav",
+        "pulley_down": "assets/audio/wheels-pulley-comment-down.wav",
+        "congratulations": "assets/audio/wheels-congratulations.wav"
       },
       "audio_transcripts": {
         "pulley_up": "أحسنت! ارتفع الصندوق مثل ما توقّعت. لما سحبنا الحبل إلى أسفل، غيّرت البَكرة الثابتة اتجاه السحب فارتفع الصندوق",
@@ -26,10 +26,10 @@
       },
       "audio_paths": {
         "intro": "assets/audio/wheels-intro.mp3",
-        "explanation": "assets/audio/wheels-explanation.mp3",
-        "pulley_up": "assets/audio/wheels-pulley-comment-up.mp3",
-        "pulley_down": "assets/audio/wheels-pulley-comment-down.mp3",
-        "congratulations": "assets/audio/wheels-congratulations.mp3"
+        "explanation": "assets/audio/wheels-explanation.wav",
+        "pulley_up": "assets/audio/wheels-pulley-comment-up.wav",
+        "pulley_down": "assets/audio/wheels-pulley-comment-down.wav",
+        "congratulations": "assets/audio/wheels-congratulations.wav"
       }
     },
     {
