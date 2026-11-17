@@ -37,16 +37,16 @@
       "title": "إلكترونيات في بيتي",
       "icon": "circuit",
       "audio": {
-        "explanation": null,
-        "lighting_comment": null,
-        "sensor_explanation": null,
-        "congratulations": null
+        "explanation": "assets/audio/electronics-explanation.wav",
+        "lighting_comment": "assets/audio/electronics-lighting-comment.wav",
+        "sensor_explanation": "assets/audio/electronics-sensor-explanation.wav",
+        "congratulations": "assets/audio/electronics-congratulations.wav"
       },
       "audio_paths": {
-        "explanation": "assets/audio/electronics-explanation.mp3",
-        "lighting_comment": "assets/audio/electronics-lighting-comment.mp3",
-        "sensor_explanation": "assets/audio/electronics-sensor-explanation.mp3",
-        "congratulations": "assets/audio/electronics-congratulations.mp3"
+        "explanation": "assets/audio/electronics-explanation.wav",
+        "lighting_comment": "assets/audio/electronics-lighting-comment.wav",
+        "sensor_explanation": "assets/audio/electronics-sensor-explanation.wav",
+        "congratulations": "assets/audio/electronics-congratulations.wav"
       },
       "audio_transcripts": {
         "explanation": "جهاز التحكّم فيه دارة إلكترونية ترسل الإشارة، بينما المضرب اليدوي يعمل بحركة اليد. لوحة التجارب تساعدنا على توصيل المكوّنات دون لحام. باعث الضوء LED يبعث الضوء عند مرور تيار مناسب. المقاومة الثابتة تحدّ مرور التيار بقيمة ثابتة، والمقاومة المتغيّرة تتيح تغيير المقاومة للتحكّم في التيار وسطوع الضوء.",
