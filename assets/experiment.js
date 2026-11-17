@@ -1,5 +1,5 @@
 import { stopLessonAudio } from './lesson-audio.js?v=2';
-import { awardProgressStar } from './progress.js?v=2';
+import { awardProgressStar } from './progress.js?v=3';
 function awardStar() {
   const message = document.querySelector('#star-message');
   const award = awardProgressStar('pulley');

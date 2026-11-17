@@ -1,4 +1,4 @@
-import { unitProgress, readCertificate, saveCertificate, starItems } from './course-state.js?v=1';
+import { unitProgress, readCertificate, saveCertificate, starItems } from './course-state.js?v=2';
 const catalogNode = document.querySelector('#course-catalog');
 const units = JSON.parse(catalogNode.textContent);
 const siteRoot = new URL(catalogNode.dataset.root || './', document.baseURI);
