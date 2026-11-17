@@ -22,5 +22,5 @@ export function saveCertificate(unit, name) {
   return { record, saved };
 }
 export function starItems() {
-  return [{ id: 'pulley', title: 'تجربة البَكرة' }, { id: 'wheels', title: 'درس عالم من عجلات' }, { id: 'electronics', title: 'درس إلكترونيات في بيتي' }, { id: 'thinkingChallenge', title: 'تحدّي وحدة نفكّر بالتكنولوجيا' }].map(item => ({ ...item, earned: hasProgressStar(item.id) }));
+  return [{ id: 'pulley', title: 'تجربة البَكرة' }, { id: 'wheels', title: 'درس عالم من عجلات' }, { id: 'electronics', title: 'درس إلكترونيات في بيتي' }, { id: 'thinkingChallenge', title: 'تحدّي وحدة نفكّر بالتكنولوجيا' }].map(item => ({ ...item, unitId: 'thinking-technology', earned: hasProgressStar(item.id) }));
 }

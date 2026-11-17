@@ -1,5 +1,5 @@
 import { awardProgressStar, hasProgressStar } from './progress.js?v=3';
-import { unitProgress, readFlag } from './course-state.js?v=2';
+import { unitProgress, readFlag } from './course-state.js?v=3';
 const catalog = JSON.parse(document.querySelector('#course-catalog').textContent);
 const unit = catalog.find(item => item.id === 'thinking-technology');
 const questions = [
