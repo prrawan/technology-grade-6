@@ -71,7 +71,7 @@ const check = question.querySelector('.answer-check');
 const feedback = question.querySelector('.answer-feedback');
 const retry = question.querySelector('.answer-retry');
 const matchingCards = [...document.querySelectorAll('.matching-card')];
-const states = [{ control: choices[0], verified: false, correct: false, answer: '' }, ...matchingCards.map(card => ({ control: card.querySelector('select'), verified: false, correct: false, answer: '' }))];
+const states = [{ control: choices[0], verified: false, correct: false, answer: '' }, ...matchingCards.map(card => ({ control: card.querySelector('input[type=radio]'), verified: false, correct: false, answer: '' }))];
 const result = document.querySelector('#electronics-result');
 const congratulations = document.querySelector('#electronics-congratulations');
 let resultShown = false;
@@ -126,21 +126,23 @@ question.addEventListener('submit', event => {
 });
 retry.addEventListener('click', () => { choices.forEach(choice => choice.checked = false); states[0].verified = false; changedBrightnessAnswer(); retry.hidden = true; choices[0].focus(); });
 matchingCards.forEach((card, index) => {
-  const select = card.querySelector('select'), button = card.querySelector('.match-check'), message = card.querySelector('.match-feedback'), again = card.querySelector('.match-retry');
+  const typeChoices = [...card.querySelectorAll('input[type=radio]')];
+  const value = () => typeChoices.find(choice => choice.checked)?.value || '';
+  const button = card.querySelector('.match-check'), message = card.querySelector('.match-feedback'), again = card.querySelector('.match-retry');
   const state = states[index+1];
   function changed() {
-    if (state.verified && state.answer === select.value) return;
-    state.answer = select.value; state.verified = false; state.correct = false;
-    button.disabled = !select.value; message.textContent = select.value ? 'تم تسجيل اختيارك. اضغط تحقّق من إجابتي.' : 'اختر وظيفة المكوّن.'; updateResult();
+    if (state.verified && state.answer === value()) return;
+    state.answer = value(); state.verified = false; state.correct = false;
+    button.disabled = !value(); message.textContent = value() ? 'تم تسجيل اختيارك. اضغط تحقّق من إجابتي.' : 'اختر وظيفة المكوّن.'; updateResult();
   }
-  select.addEventListener('input', changed); select.addEventListener('change', changed); window.addEventListener('pageshow', changed);
+  typeChoices.forEach(choice => { choice.addEventListener('input', changed); choice.addEventListener('change', changed); }); window.addEventListener('pageshow', changed);
   button.addEventListener('click', () => {
-    if (!select.value) return;
-    state.answer = select.value; state.verified = true; state.correct = select.value === card.dataset.correct;
+    if (!value()) return;
+    state.answer = value(); state.verified = true; state.correct = value() === card.dataset.correct;
     message.textContent = state.correct ? `أحسنت! ${componentDescriptions[card.dataset.correct]}` : `راجع الوظيفة: ${componentDescriptions[card.dataset.correct]} ثم حاول مرة أخرى.`;
     button.disabled = true; again.hidden = false; updateResult();
   });
-  again.addEventListener('click', () => { select.value = ''; state.verified = false; changed(); again.hidden = true; select.focus(); });
+  again.addEventListener('click', () => { typeChoices.forEach(choice => choice.checked = false); state.verified = false; changed(); again.hidden = true; typeChoices[0].focus(); });
 });
 const tabs = [...document.querySelectorAll('.lesson-tabs a')];
 function markSection() { tabs.forEach(tab => { if (tab.hash === (location.hash || '#learn')) tab.setAttribute('aria-current','location'); else tab.removeAttribute('aria-current'); }); }
