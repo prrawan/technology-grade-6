@@ -41,7 +41,7 @@ const forceFeedback = document.querySelector('#force-feedback');
 const forceRetry = forceForm.querySelector('.force-retry');
 const forceCheck = forceForm.querySelector('.force-check');
 const forceChoices = [...forceForm.querySelectorAll('input')];
-const answers = classificationCards.map(card => ({ verified: false, correct: false, answer: '', control: card.querySelector('select') }));
+const answers = classificationCards.map(card => ({ verified: false, correct: false, answer: '', control: card.querySelector('input[type=radio]') }));
 answers.push({ verified: false, correct: false, answer: '', control: forceChoices[0] });
 const resultCard = document.querySelector('#lesson-result');
 let resultShown = false;
@@ -92,28 +92,29 @@ document.querySelector('#review-answers').addEventListener('click', () => {
   target.scrollIntoView({ block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
 });
 classificationCards.forEach((card, index) => {
-  const select = card.querySelector('select');
+  const typeChoices = [...card.querySelectorAll('input[type=radio]')];
+  const value = () => typeChoices.find(choice => choice.checked)?.value || '';
   const status = card.querySelector('.class-status');
   const retry = card.querySelector('.classification-retry');
   const check = card.querySelector('.classification-check');
   const state = answers[index];
   function changed() {
-    if (state.verified && state.answer === select.value) return;
-    state.verified = false; state.correct = false; state.answer = select.value;
-    check.disabled = !select.value;
-    status.textContent = select.value ? 'تم تسجيل اختيارك. اضغط تحقّق من إجابتي.' : 'اختر إجابتك.';
+    if (state.verified && state.answer === value()) return;
+    state.verified = false; state.correct = false; state.answer = value();
+    check.disabled = !value();
+    status.textContent = value() ? 'تم تسجيل اختيارك. اضغط تحقّق من إجابتي.' : 'اختر إجابتك.';
     updateResult();
   }
-  select.addEventListener('change', changed); select.addEventListener('input', changed);
+  typeChoices.forEach(choice => { choice.addEventListener('change', changed); choice.addEventListener('input', changed); });
   window.addEventListener('pageshow', changed);
   check.addEventListener('click', () => {
-    if (!select.value) return;
-    state.answer = select.value; state.verified = true; state.correct = select.value === card.dataset.correct;
-    status.textContent = state.correct ? `أحسنت! ${systemDescriptions[select.value]}` : `حاول مجددًا. ${axisHint}`;
+    if (!value()) return;
+    state.answer = value(); state.verified = true; state.correct = value() === card.dataset.correct;
+    status.textContent = state.correct ? `أحسنت! ${systemDescriptions[value()]}` : `حاول مجددًا. ${axisHint}`;
     retry.hidden = false; check.disabled = true;
     updateResult();
   });
-  retry.addEventListener('click', () => { select.value = ''; state.verified = false; changed(); retry.hidden = true; select.focus(); });
+  retry.addEventListener('click', () => { typeChoices.forEach(choice => choice.checked = false); state.verified = false; changed(); retry.hidden = true; typeChoices[0].focus(); });
 });
 const forceState = answers.at(-1);
 function forceChanged() {
