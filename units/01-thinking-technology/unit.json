@@ -40,14 +40,14 @@
         "explanation": "assets/audio/electronics-explanation.wav",
         "lighting_comment": "assets/audio/electronics-lighting-comment.wav",
         "sensor_explanation": "assets/audio/electronics-sensor-explanation.wav",
-        "congratulations": "assets/audio/electronics-congratulations.wav",
+        "congratulations": "assets/audio/electronics-congratulations-v2.wav",
         "intro": "assets/audio/electronics-intro.wav"
       },
       "audio_paths": {
         "explanation": "assets/audio/electronics-explanation.wav",
         "lighting_comment": "assets/audio/electronics-lighting-comment.wav",
         "sensor_explanation": "assets/audio/electronics-sensor-explanation.wav",
-        "congratulations": "assets/audio/electronics-congratulations.wav",
+        "congratulations": "assets/audio/electronics-congratulations-v2.wav",
         "intro": "assets/audio/electronics-intro.wav"
       },
       "audio_transcripts": {
