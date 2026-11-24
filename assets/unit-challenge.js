@@ -10,6 +10,7 @@ const questions = [
   { title:'أيّ مكوّن يتيح لنا تغيير المقاومة للتحكّم في شدة الإضاءة؟', art:'electronics/variable-resistor.svg', alt:'مقاومة متغيّرة بمسمار للضبط', options:['المقاومة الثابتة','المقاومة المتغيّرة'], correct:1, reason:'تتيح المقاومة المتغيّرة تعديل مقاومتها للتحكّم في التيار وشدة الإضاءة.', hint:'أيّ المكوّنين يمكن ضبط قيمته بدل بقائها ثابتة؟' },
   { title:'ما دور الترانزستور في دارة الاستشعار التي جرّبناها؟', art:'brand-3d/transistor.svg', alt:'ترانزستور ثلاثي الأرجل بخامة كحلية وأرجل معدنية', options:['يعمل كمفتاح إلكتروني','يصدر الضوء بدل الـLED'], correct:0, reason:'يعمل الترانزستور كمفتاح إلكتروني يسمح بمرور التيار إلى الـLED عند وصول إشارة المستشعر.', hint:'من الذي يتحكّم بمرور التيار، ومن الذي يصدر الضوء؟' },
 ];
+const arabicDigits = new Intl.NumberFormat('ar-u-nu-arab', { useGrouping: false });
 const states = questions.map(() => ({ selected:null, checked:false }));
 let current = 0;
 const board = document.querySelector('#challenge-board');
@@ -23,7 +24,7 @@ function moveTo(node) { node.focus({preventScroll:true}); node.scrollIntoView({b
 function showQuestion(focus = true) {
   board.hidden = false; result.hidden = true;
   const q = questions[current], state = states[current];
-  document.querySelector('#question-number').textContent = `السؤال ${current+1} من ٦`;
+  document.querySelector('#question-number').textContent = `السؤال ${arabicDigits.format(current + 1)} من ${arabicDigits.format(questions.length)}`;
   const steps = document.querySelector('#question-steps'); steps.replaceChildren();
   states.forEach((answer,index) => { const step = document.createElement('span'); step.className = index===current?'current':answer.checked?'done':''; steps.append(step); });
   const title = document.querySelector('#question-title'); title.textContent = q.title;
@@ -73,13 +74,12 @@ function certificatePath() {
   host.append(cta);
   const missing=unit.lessons.filter(lesson=>!readFlag(lesson.key));
   if(missing.length){const message=document.createElement('p');message.textContent='أكمل الدروس التالية لتفتح شهادتك:';host.append(message);const list=document.createElement('ul');for(const lesson of missing){const li=document.createElement('li'),a=document.createElement('a');a.textContent=lesson.title;a.href=new URL(lesson.href,new URL('../../',location.href));li.append(a);list.append(li);}host.append(list);}
-  if(!unitProgress(unit).challengeComplete){const message=document.createElement('p');message.textContent='صحّح إجابات التحدّي لتحصل على ٦ من ٦ وتفتح شرط إنجازه للشهادة.';host.append(message);}
+  if(!unitProgress(unit).challengeComplete){const message=document.createElement('p');message.textContent=`صحّح إجابات التحدّي لتحصل على ${arabicDigits.format(questions.length)} من ${arabicDigits.format(questions.length)} وتفتح شرط إنجازه للشهادة.`;host.append(message);}
 }
 function showResult() {
   if(!states.every(state=>state.checked))return;
   board.hidden=true;result.hidden=false;
   const score=states.filter((state,index)=>state.selected===questions[index].correct).length;
-  const arabicDigits = new Intl.NumberFormat('ar-u-nu-arab', { useGrouping: false });
   document.querySelector('#challenge-score').textContent=`الإجابات الصحيحة: ${arabicDigits.format(score)} من ${arabicDigits.format(questions.length)}`;
   const message=document.querySelector('#challenge-award');
   if(score===6){const award=awardProgressStar('thinkingChallenge');message.textContent=award.first?(award.saved?'أحسنت! أكملت تحدّي الوحدة وربحت نجمة محفوظة على جهازك.':'أحسنت! أكملت التحدّي؛ تعذّر حفظ الإنجاز على هذا الجهاز.'):'أحسنت! نجمة التحدّي محفوظة ولن تُحتسب مرة أخرى.';if(award.first)celebrate();}
