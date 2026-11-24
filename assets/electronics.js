@@ -1,6 +1,30 @@
 import { awardProgressStar, hasProgressStar } from './progress.js?v=3';
 import { bindLessonAudio, stopLessonAudio } from './lesson-audio.js?v=2';
 bindLessonAudio();
+
+// Video is student-controlled and exclusive with the lesson's other recordings.
+const resistanceVideo = document.querySelector('#resistance-video');
+const videoPlayButton = document.querySelector('#resistance-video-play');
+function updateVideoButton() {
+  const playing = !resistanceVideo.paused && !resistanceVideo.ended;
+  videoPlayButton.textContent = playing ? 'إيقاف الفيديو مؤقتًا' : resistanceVideo.ended ? 'إعادة تشغيل الفيديو' : resistanceVideo.currentTime > 0 ? 'متابعة الفيديو' : '▶ تشغيل الفيديو';
+  videoPlayButton.setAttribute('aria-pressed', String(playing));
+}
+videoPlayButton.addEventListener('click', async () => {
+  if (!resistanceVideo.paused) { resistanceVideo.pause(); return; }
+  if (resistanceVideo.ended) resistanceVideo.currentTime = 0;
+  document.querySelectorAll('.lesson-audio-control audio').forEach(audio => audio.pause());
+  try { await resistanceVideo.play(); }
+  catch { document.querySelector('#resistance-video-note').textContent = 'تعذّر تشغيل الفيديو. اضغط للمحاولة مرة أخرى.'; }
+});
+resistanceVideo.addEventListener('play', () => {
+  document.querySelectorAll('.lesson-audio-control audio').forEach(audio => audio.pause());
+  updateVideoButton();
+});
+for (const event of ['pause', 'ended']) resistanceVideo.addEventListener(event, updateVideoButton);
+document.querySelectorAll('.lesson-audio-control audio').forEach(audio => audio.addEventListener('play', () => resistanceVideo.pause()));
+document.querySelectorAll('.lesson-audio-button').forEach(button => button.addEventListener('click', () => resistanceVideo.pause(), { capture: true }));
+
 const componentDescriptions = {
   breadboard: 'لوحة التجارب: نوصّل بها المكوّنات ونجرب الدارة دون لحام.',
   led: 'باعث الضوء LED: يبعث الضوء عند مرور تيار مناسب فيه.',
@@ -30,8 +54,12 @@ function updateLighting(interacted = false) {
   document.querySelector('#brightness-level').textContent = state;
   resistance.setAttribute('aria-valuetext', `${value} أوم — ${state}`);
   if (interacted) {
-    document.querySelector('#lighting-feedback').textContent = `${state}. عندما تزيد المقاومة، يقلّ التيار في هذه المحاكاة ويخفت ضوء LED.`;
-    document.querySelector('#lighting-audio').hidden = false;
+    const success = value >= 750;
+    const feedback = document.querySelector('#lighting-feedback');
+    feedback.textContent = success
+      ? 'أحسنت! لما زادت المقاومة، خفّت إضاءة المصباح'
+      : `${state}. جرّب زيادة المقاومة حتى تصبح إضاءة المصباح خافتة.`;
+    feedback.classList.toggle('lighting-success', success);
   }
 }
 resistance.addEventListener('input', () => updateLighting(true));
