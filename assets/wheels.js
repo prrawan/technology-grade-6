@@ -1,3 +1,4 @@
+import { presentAchievement } from './lesson-achievement.js';
 import { awardProgressStar, hasProgressStar } from './progress.js?v=3';
 import { bindLessonAudio, stopLessonAudio } from './lesson-audio.js?v=2';
 bindLessonAudio();
@@ -45,21 +46,6 @@ const answers = classificationCards.map(card => ({ verified: false, correct: fal
 answers.push({ verified: false, correct: false, answer: '', control: forceChoices[0] });
 const resultCard = document.querySelector('#lesson-result');
 let resultShown = false;
-function celebrateLesson() {
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const layer = resultCard.querySelector('.result-stars');
-  for (let index = 0; index < 10; index++) {
-    const star = document.createElement('span');
-    star.textContent = '★'; star.style.color = index % 2 ? '#126C70' : '#D6A248';
-    layer.append(star);
-    const animation = star.animate([
-      { transform: 'translate(0, 0) scale(.4)', opacity: 0 },
-      { opacity: 1, offset: .2 },
-      { transform: `translate(${(index - 4.5) * 24}px, ${-55 - (index % 3) * 30}px) rotate(${index * 30}deg) scale(1)`, opacity: 0 },
-    ], { duration: 850, easing: 'ease-out', iterations: 1 });
-    animation.onfinish = () => star.remove();
-  }
-}
 function updateResult() {
   const verified = answers.filter(answer => answer.verified).length;
   const correct = answers.filter(answer => answer.verified && answer.correct).length;
@@ -74,16 +60,8 @@ function updateResult() {
   document.querySelector('#result-title').textContent = complete ? 'أحسنت! أكملت الدرس' : 'نتيجتك في الدرس';
   document.querySelector('#completion-message').textContent = complete ? 'ميّزت بين أنظمة البَكرات واخترت النظام المناسب لرفع الحمل' : 'بعض الإجابات تحتاج إلى المراجعة. يمكنك تصحيحها ثم التحقّق من جديد.';
   document.querySelector('#review-answers').hidden = complete;
-  const awardMessage = document.querySelector('#lesson-award-message');
-  if (complete) {
-    const award = awardProgressStar('wheels');
-    awardMessage.textContent = award.first
-      ? award.saved ? '★ ربحت نجمة إنجاز الدرس، وحُفظت على جهازك!' : '★ ربحت نجمة إنجاز لهذه الجلسة؛ تعذّر حفظها على الجهاز.'
-      : '★ نجمة الدرس محتسبة؛ لن تُضاف مرة أخرى.';
-    if (award.first) celebrateLesson();
-  } else {
-    awardMessage.textContent = hasProgressStar('wheels') ? '★ نجمة إنجازك السابق محفوظة. صحّح المحاولات الحالية لتحديث نتيجتك.' : '';
-  }
+  const award = complete ? awardProgressStar('wheels') : null;
+  presentAchievement(resultCard, { correct, total: answers.length, complete, earned: hasProgressStar('wheels'), first: award?.first, saved: award?.saved });
 }
 document.querySelector('#review-answers').addEventListener('click', () => {
   const target = answers.find(answer => !answer.verified || !answer.correct)?.control;

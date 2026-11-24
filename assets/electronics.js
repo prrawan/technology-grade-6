@@ -1,3 +1,4 @@
+import { presentAchievement } from './lesson-achievement.js';
 import { awardProgressStar, hasProgressStar } from './progress.js?v=3';
 import { bindLessonAudio, stopLessonAudio } from './lesson-audio.js?v=2';
 bindLessonAudio();
@@ -103,15 +104,6 @@ const states = [{ control: choices[0], verified: false, correct: false, answer: 
 const result = document.querySelector('#electronics-result');
 const congratulations = document.querySelector('#electronics-congratulations');
 let resultShown = false;
-function celebrate() {
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const layer = result.querySelector('.result-stars');
-  for (let i = 0; i < 10; i++) {
-    const star = document.createElement('span'); star.textContent = '★'; star.style.color = i % 2 ? '#126C70' : '#D6A248'; layer.append(star);
-    const animation = star.animate([{ transform: 'translate(0,0) scale(.4)', opacity: 0 }, { opacity: 1, offset: .2 }, { transform: `translate(${(i-4.5)*24}px,${-55-(i%3)*30}px) scale(1)`, opacity: 0 }], { duration: 850, easing: 'ease-out', iterations: 1 });
-    animation.onfinish = () => star.remove();
-  }
-}
 function updateResult() {
   const verified = states.filter(state => state.verified).length;
   const correct = states.filter(state => state.verified && state.correct).length;
@@ -125,12 +117,8 @@ function updateResult() {
   document.querySelector('#electronics-review').hidden = complete;
   congratulations.hidden = !complete;
   if (!complete) stopLessonAudio(congratulations);
-  const awardText = document.querySelector('#electronics-award');
-  if (complete) {
-    const award = awardProgressStar('electronics');
-    awardText.textContent = award.first ? award.saved ? '★ ربحت نجمة إنجاز الدرس وحُفظت على جهازك!' : '★ ربحت نجمة لهذه الجلسة؛ تعذّر حفظها على الجهاز.' : '★ نجمة الدرس محتسبة؛ لن تضاف مرة أخرى.';
-    if (award.first) celebrate();
-  } else awardText.textContent = hasProgressStar('electronics') ? '★ نجمة إنجازك السابق محفوظة.' : '';
+  const award = complete ? awardProgressStar('electronics') : null;
+  presentAchievement(result, { correct, total: states.length, complete, earned: hasProgressStar('electronics'), first: award?.first, saved: award?.saved });
 }
 document.querySelector('#electronics-review').addEventListener('click', () => {
   const target = states.find(state => !state.verified || !state.correct)?.control;
