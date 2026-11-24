@@ -55,6 +55,8 @@ def page(path, title, content):
         extra.append(f'<script type="application/json" id="course-catalog" data-root="{prefix}">{serialized}</script>')
         content += (ROOT / 'templates/certificate-dialog.html').read_text()
     styles.extend(['brand-3d.css', 'visual-system.css'])
+    if course_page:
+        styles.append('certificate-dialog.css')
     if path.endswith(('world-of-wheels.html', 'electronics-at-home.html')):
         styles.append('lesson-achievement.css')
     modules.extend(['caption-reveal.js', 'interaction-feedback.js'])
