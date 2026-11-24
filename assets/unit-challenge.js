@@ -79,7 +79,8 @@ function showResult() {
   if(!states.every(state=>state.checked))return;
   board.hidden=true;result.hidden=false;
   const score=states.filter((state,index)=>state.selected===questions[index].correct).length;
-  document.querySelector('#challenge-score').textContent=`الإجابات الصحيحة: ${score} من ٦`;
+  const arabicDigits = new Intl.NumberFormat('ar-u-nu-arab', { useGrouping: false });
+  document.querySelector('#challenge-score').textContent=`الإجابات الصحيحة: ${arabicDigits.format(score)} من ${arabicDigits.format(questions.length)}`;
   const message=document.querySelector('#challenge-award');
   if(score===6){const award=awardProgressStar('thinkingChallenge');message.textContent=award.first?(award.saved?'أحسنت! أكملت تحدّي الوحدة وربحت نجمة محفوظة على جهازك.':'أحسنت! أكملت التحدّي؛ تعذّر حفظ الإنجاز على هذا الجهاز.'):'أحسنت! نجمة التحدّي محفوظة ولن تُحتسب مرة أخرى.';if(award.first)celebrate();}
   else message.textContent=hasProgressStar('thinkingChallenge')?'إنجازك السابق محفوظ. راجع إجابات هذه المحاولة.':'اقتربت من الإنجاز! راجع التلميحات وصحّح الأسئلة المتبقية.';
