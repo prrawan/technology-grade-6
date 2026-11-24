@@ -1,7 +1,7 @@
 /* Shared final presentation layer. Illustration and activity coordinates stay intact. */
-@font-face{font-family:JourneyArabic;src:url('./fonts/NotoSansArabic-Regular.ttf') format('truetype');font-style:normal;font-weight:400;font-display:swap}
-@font-face{font-family:JourneyArabic;src:url('./fonts/NotoSansArabic-Bold.ttf') format('truetype');font-style:normal;font-weight:600 900;font-display:swap}
-:root{--font-arabic:JourneyArabic,Tahoma,Arial,sans-serif;--surface:#fffdf7;--card-radius:24px;--soft-shadow:0 5px 0 #b7c9bd24,0 10px 22px #18273d0b}
+@font-face{font-family:Tajawal;src:url('./fonts/Tajawal-Regular.ttf') format('truetype');font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:Tajawal;src:url('./fonts/Tajawal-Bold.ttf') format('truetype');font-style:normal;font-weight:600 900;font-display:swap}
+:root{--font-arabic:Tajawal,Tahoma,Arial,sans-serif;--surface:#fffdf7;--card-radius:24px;--soft-shadow:0 5px 0 #b7c9bd24,0 10px 22px #18273d0b}
 body{font-family:var(--font-arabic);line-height:1.9}h1,h2,h3,button,input,select,textarea{font-family:var(--font-arabic)}h1,h2,h3{font-weight:700;text-wrap:balance}p,figcaption{line-height:1.9;text-wrap:pretty}.section-content>p,.about-intro p{max-width:70ch}.site-header .brand{line-height:1.65}.site-header .brand small{line-height:1.7}.button{line-height:1.7;min-height:48px}.button:focus-visible,button:focus-visible{outline:3px solid #D6A248;outline-offset:4px}.brand-icon{filter:drop-shadow(0 3px 2px #18273d16)}
 .unit-lesson,.about-card,.course-unit-tile,.portfolio-star-card,.classification-card,.matching-card,.about-standard{border-radius:var(--card-radius);box-shadow:var(--soft-shadow)}
 .unit-lesson p,.about-card p,.portfolio-unit-detail{line-height:1.85}.about-card p{font-size:clamp(18px,1.8vw,22px)}.classification-card legend,.matching-card legend{line-height:1.8}.answer-choice{font-family:var(--font-arabic);line-height:1.7}.pulley-options .answer-choice{font-size:clamp(15px,1.65vw,18px);padding-inline:5px}
@@ -13,3 +13,25 @@ body{font-family:var(--font-arabic);line-height:1.9}h1,h2,h3,button,input,select
 @media(max-width:700px){.brand small{font-size:13px}.unit-lesson p,.about-card p{font-size:19px}.unit-lesson h3{font-size:clamp(24px,6vw,30px)}.lesson-tabs a{font-size:clamp(20px,5.5vw,28px)}.site-header .stars,.site-header .nav-link{font-size:15px}.answer-choice{font-size:17px}.portfolio-page .portfolio-star-card{grid-template-columns:72px 1fr 56px}.achievement-copy h3{font-size:19px}}
 @media(prefers-reduced-motion:reduce){[data-caption-pending]{opacity:1;transform:none}}
 @media print{body{font-family:var(--font-arabic)}[data-caption-pending]{opacity:1;transform:none}.certificate-sheet{box-shadow:none}}
+
+/* Shared selectable surfaces: transforms never change the card's layout box. */
+.device-choices button,.component-cards button,.answer-choice,.unit-map-option,.hub-link{border-radius:20px;border-color:#91bcb3;box-shadow:var(--soft-shadow)}
+.device-choices button,.component-cards button{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:10px;overflow:hidden;min-height:48px;padding:16px;}
+.device-choices button>span,.component-cards button>span{font-weight:700;font-size:20px;line-height:1.7}
+.device-choices button>img,.component-cards button>img{padding:7px;transform-origin:center;transition:transform 180ms ease;}
+button[aria-pressed=true]:is([data-device],[data-component]),.classification-card:has(input:checked),.matching-card:has(input:checked),#challenge-board:has(input:checked){border-color:#126C70;box-shadow:inset 0 0 0 1px #126C70,var(--soft-shadow)}
+button[aria-pressed=true]:is([data-device],[data-component])>img,.classification-card:has(input:checked) .visible-answer-group>img,.matching-card:has(input:checked) .visible-answer-group>img,#challenge-board:has(input:checked) #question-art{transform:scale(1.035)}
+.classification-card .visible-answer-group>img,.matching-card .visible-answer-group>img{display:block;width:100%;height:240px;max-width:100%;object-fit:contain;padding:8px;transition:transform 180ms ease;transform-origin:center;}
+.matching-card .visible-answer-group>img{height:165px}
+.classification-card .visible-answer-group{min-width:0}.visible-answer-group legend{display:block;width:100%;font-size:22px;line-height:1.8;margin:0 0 12px;text-align:right}
+#question-art{padding:8px;transition:transform 180ms ease;transform-origin:center}
+:is(a,button):active>.brand-icon,.hub-link:active .brand-icon,.unit-map-option:active .brand-icon,.unit-lesson:active .lesson-3d-art .brand-icon{transform:scale(1.035)}
+.brand-icon{transition:transform 180ms ease}
+#device-feedback,#component-feedback,.part-description,#system-description,.class-status,.match-feedback,.answer-feedback,#force-feedback,#lighting-feedback,#sensor-feedback,#bike-status,#history-message{min-block-size:3.8em;line-height:1.9;scroll-margin-top:20px}
+#component-feedback,.class-status,.match-feedback{min-block-size:5.7em}
+@media(max-width:700px){#component-feedback,.class-status,.match-feedback{min-block-size:7.6em}.device-choices button>span,.component-cards button>span{font-size:18px}.classification-card .visible-answer-group>img{height:220px}}
+@media(min-width:701px) and (max-width:1050px){.classification-card{display:block}.classification-card .visible-answer-group>img{height:210px}.classification-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){.brand-icon,#question-art,.device-choices button>img,.component-cards button>img,.classification-card .visible-answer-group>img,.matching-card .visible-answer-group>img{transition:none}}
+
+.history-cart{overflow:hidden}.history-cart>svg{padding:8px;transition:transform 180ms ease}.history-cart[data-visual-selected=true]{border-color:#126C70;box-shadow:inset 0 0 0 1px #126C70,var(--soft-shadow)}.history-cart[data-visual-selected=true]>svg,.lesson-audio-button:active>img,.lesson-tabs a:active .brand-icon{transform:scale(1.035)}
+@media(prefers-reduced-motion:reduce){.history-cart>svg{transition:none}}
