@@ -50,7 +50,6 @@ form.addEventListener('submit', event => {
   const sentence=document.createElement('p'); sentence.textContent=(correct?'أحسنت! ':'لنراجع الفكرة. ')+q.reason; feedback.append(sentence);
   if(!correct){const hint=document.createElement('p');hint.className='challenge-hint';hint.textContent='تلميح: '+q.hint;feedback.append(hint);}
   options.children[state.selected].append(feedback);
-  if(!reduced())feedback.animate([{opacity:0,transform:'translateY(-5px)'},{opacity:1,transform:'translateY(0)'}],{duration:180,easing:'ease-out'});
   check.hidden=true;next.hidden=false;
   next.textContent=states.every(answer=>answer.checked)?'اعرض النتيجة ←':'السؤال التالي ←';
 });

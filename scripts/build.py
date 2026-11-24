@@ -55,7 +55,7 @@ def page(path, title, content):
         extra.append(f'<script type="application/json" id="course-catalog" data-root="{prefix}">{serialized}</script>')
         content += (ROOT / 'templates/certificate-dialog.html').read_text()
     styles.extend(['brand-3d.css', 'visual-system.css'])
-    modules.append('caption-reveal.js')
+    modules.extend(['caption-reveal.js', 'interaction-feedback.js'])
     for name in styles:
         digest = hashlib.sha256((ROOT / 'assets' / name).read_bytes()).hexdigest()[:12]
         extra.append(f'<link rel="stylesheet" href="{prefix}assets/{name}?v={digest}">')
