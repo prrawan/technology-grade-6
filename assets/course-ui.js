@@ -1,3 +1,4 @@
+import { celebrateCertificate, stopCertificateCelebration } from './certificate-celebration.js';
 import { unitProgress, readCertificate, saveCertificate, starItems } from './course-state.js?v=3';
 const catalogNode = document.querySelector('#course-catalog');
 const units = JSON.parse(catalogNode.textContent);
@@ -16,12 +17,15 @@ function showCertificate(unit, record) {
   if (!dialog) {
     document.body.append(document.querySelector('#course-certificate-template').content.cloneNode(true));
     dialog = document.querySelector('dialog.course-certificate-dialog');
-    dialog.querySelector('.certificate-print').addEventListener('click', () => window.print());
+    dialog.querySelector('.certificate-print').addEventListener('click', () => { stopCertificateCelebration(dialog); window.print(); });
+    dialog.querySelector('.certificate-celebrate').addEventListener('click', () => celebrateCertificate(dialog));
+    dialog.addEventListener('close', () => stopCertificateCelebration(dialog));
   }
   dialog.querySelector('.certificate-student').textContent = record.name;
   dialog.querySelector('.certificate-unit-name').textContent = unit.title;
   dialog.querySelector('.certificate-date').textContent = 'تاريخ الإصدار: ' + new Intl.DateTimeFormat('ar', { dateStyle: 'long' }).format(new Date(record.issuedAt));
   if (!dialog.open) dialog.showModal();
+  celebrateCertificate(dialog);
 }
 function renderCertificateCards() {
   document.querySelectorAll('[data-unit-certificate]').forEach(card => {

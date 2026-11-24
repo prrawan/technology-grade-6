@@ -54,7 +54,12 @@ def page(path, title, content):
         serialized = json.dumps(COURSE_CATALOG, ensure_ascii=False).replace('<', '\\u003c')
         extra.append(f'<script type="application/json" id="course-catalog" data-root="{prefix}">{serialized}</script>')
         content += (ROOT / 'templates/certificate-dialog.html').read_text()
-    styles.append('brand-3d.css')
+    styles.extend(['brand-3d.css', 'visual-system.css'])
+    if course_page:
+        styles.append('certificate-dialog.css')
+    if path.endswith(('world-of-wheels.html', 'electronics-at-home.html')):
+        styles.append('lesson-achievement.css')
+    modules.extend(['caption-reveal.js', 'interaction-feedback.js'])
     for name in styles:
         digest = hashlib.sha256((ROOT / 'assets' / name).read_bytes()).hexdigest()[:12]
         extra.append(f'<link rel="stylesheet" href="{prefix}assets/{name}?v={digest}">')
