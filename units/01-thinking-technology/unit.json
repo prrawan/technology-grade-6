@@ -2,7 +2,60 @@
   "slug": "thinking-technology",
   "title": "نفكّر بالتكنولوجيا",
   "lessons": [
-    {"slug": "world-of-wheels", "title": "عالم من عجلات", "icon": "wheel"},
-    {"slug": "electronics-at-home", "title": "إلكترونيات في بيتي", "icon": "circuit"}
+    {
+      "slug": "world-of-wheels",
+      "title": "عالم من عجلات",
+      "icon": "wheel",
+      "audio": {
+        "intro": "assets/audio/wheels-intro.wav",
+        "explanation": "assets/audio/wheels-explanation.wav",
+        "pulley_up": "assets/audio/wheels-pulley-comment-up.wav",
+        "pulley_down": "assets/audio/wheels-pulley-comment-down.wav",
+        "congratulations": "assets/audio/wheels-congratulations.wav"
+      },
+      "audio_transcripts": {
+        "pulley_up": "أحسنت! ارتفع الصندوق مثل ما توقّعت. لما سحبنا الحبل إلى أسفل، غيّرت البَكرة الثابتة اتجاه السحب فارتفع الصندوق",
+        "pulley_down": "شوف شو صار! الصندوق ارتفع. لما سحبنا الحبل إلى أسفل، غيّرت البَكرة الثابتة اتجاه السحب فارتفع الصندوق",
+        "congratulations": "أحسنت! تعرّفت إلى أنواع البَكرات واخترت النظام المناسب لرفع الحمل. صرت جاهز تكمّل رحلتك مع إلكترونيات في بيتي!"
+      },
+      "audio_sections": {
+        "explanation": [
+          "العجلة: سؤال حياة الناس قبل اختراع العجلة ثم العجلة الحجرية والزلّاجة بعجلات خشبية",
+          "البَكرة: العجلة والمحور والحبل ووظائفها ثم مقارنة الثابتة والمتحركة والمركّبة"
+        ]
+      },
+      "audio_paths": {
+        "intro": "assets/audio/wheels-intro.wav",
+        "explanation": "assets/audio/wheels-explanation.wav",
+        "pulley_up": "assets/audio/wheels-pulley-comment-up.wav",
+        "pulley_down": "assets/audio/wheels-pulley-comment-down.wav",
+        "congratulations": "assets/audio/wheels-congratulations.wav"
+      }
+    },
+    {
+      "slug": "electronics-at-home",
+      "title": "إلكترونيات في بيتي",
+      "icon": "circuit",
+      "audio": {
+        "explanation": "assets/audio/electronics-explanation.wav",
+        "lighting_comment": "assets/audio/electronics-lighting-comment.wav",
+        "sensor_explanation": "assets/audio/electronics-sensor-explanation.wav",
+        "congratulations": "assets/audio/electronics-congratulations-v2.wav",
+        "intro": "assets/audio/electronics-intro.wav"
+      },
+      "audio_paths": {
+        "explanation": "assets/audio/electronics-explanation.wav",
+        "lighting_comment": "assets/audio/electronics-lighting-comment.wav",
+        "sensor_explanation": "assets/audio/electronics-sensor-explanation.wav",
+        "congratulations": "assets/audio/electronics-congratulations-v2.wav",
+        "intro": "assets/audio/electronics-intro.wav"
+      },
+      "audio_transcripts": {
+        "explanation": "جهاز التحكّم فيه دارة إلكترونية ترسل الإشارة، بينما المضرب اليدوي يعمل بحركة اليد. لوحة التجارب تساعدنا على توصيل المكوّنات دون لحام. باعث الضوء LED يبعث الضوء عند مرور تيار مناسب. المقاومة الثابتة تحدّ مرور التيار بقيمة ثابتة، والمقاومة المتغيّرة تتيح تغيير المقاومة للتحكّم في التيار وسطوع الضوء.",
+        "lighting_comment": "عندما تزيد المقاومة، يقلّ التيار في هذه المحاكاة ويخفت ضوء LED. وعندما تقلّ المقاومة يزداد سطوعه، مع إبقاء مصدر الطاقة وباقي الدارة ثابتين.",
+        "sensor_explanation": "وصلت إشارة من المستشعر، فعمل الترانزستور كمفتاح إلكتروني وسمح بمرور التيار إلى باعث الضوء فأضاء.",
+        "congratulations": "أحسنت! ميّزت المكوّنات ووظائفها، وعرفت كيف تغيّر المقاومة شدة الإضاءة وكيف يعمل الترانزستور كمفتاح إلكتروني."
+      }
+    }
   ]
 }

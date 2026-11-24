@@ -1,5 +1,21 @@
 [
-  {"directory": "01-thinking-technology", "title": "نفكّر بالتكنولوجيا", "icon": "bulb"},
-  {"title": "الاتصالات وتكنولوجيا المعلومات", "icon": "signal"},
-  {"title": "التكنولوجيا الطبية", "icon": "medical"}
+  {
+    "directory": "01-thinking-technology",
+    "title": "نفكّر بالتكنولوجيا",
+    "icon": "wheel",
+    "slug": "thinking-technology",
+    "challenge_url": "units/thinking-technology/challenge.html"
+  },
+  {
+    "title": "الاتصالات وتكنولوجيا المعلومات",
+    "icon": "signal",
+    "slug": "communications-information",
+    "challenge_url": null
+  },
+  {
+    "title": "التكنولوجيا الطبية",
+    "icon": "medical",
+    "slug": "medical-technology",
+    "challenge_url": null
+  }
 ]
